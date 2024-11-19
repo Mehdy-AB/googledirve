@@ -2,7 +2,7 @@
 const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => {
     
     return (
-      <div className={`fixed z-[99999] ${sidebarOpen ? "w-[12rem]" : "w-[4rem]"} duration-300 ease-linear h-[100%] drop-shadow-md bg-foreground`}>
+      <div className={`fixed z-[100] ${sidebarOpen ? "w-[12rem]" : "w-[4rem]"} duration-300 ease-linear h-[100%] drop-shadow-md bg-foreground`}>
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)} // Wrap the call in an arrow function
           className={`absolute ${sidebarOpen ? "left-[12rem]" : "left-[4rem]"} duration-300 ease-linear bg-secondColor rounded-r-full p-1 top-[50%]`}
@@ -33,7 +33,7 @@ const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSid
         >
         <div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-6">
-        <path fill-rule="evenodd" d="M11.47 2.47a.75.75 0 0 1 1.06 0l4.5 4.5a.75.75 0 0 1-1.06 1.06l-3.22-3.22V16.5a.75.75 0 0 1-1.5 0V4.81L8.03 8.03a.75.75 0 0 1-1.06-1.06l4.5-4.5ZM3 15.75a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+        <path fillRule="evenodd" d="M11.47 2.47a.75.75 0 0 1 1.06 0l4.5 4.5a.75.75 0 0 1-1.06 1.06l-3.22-3.22V16.5a.75.75 0 0 1-1.5 0V4.81L8.03 8.03a.75.75 0 0 1-1.06-1.06l4.5-4.5ZM3 15.75a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
         </svg></div>
         {sidebarOpen &&
         <div className="ml-4">
@@ -63,7 +63,7 @@ const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSid
         <div className=" flex border-b-2 items-center  border-gray-400 border-opacity-20 hover:opacity-50 py-2 p-1 cursor-pointer">
         <div className=" ml-3">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-7">
-        <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+        <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clipRule="evenodd" />
         </svg>
 
 
@@ -106,7 +106,7 @@ const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSid
         <div className=" flex border-b-2 items-center  border-gray-400 border-opacity-20 hover:opacity-50 py-2 p-1 cursor-pointer">
         <div className=" ml-3">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-8">
-        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clipRule="evenodd" />
         </svg>
 
         </div>
