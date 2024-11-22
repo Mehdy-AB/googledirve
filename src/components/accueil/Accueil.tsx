@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import UploadForm from './UploadForm';
+import UploadForm from '../../components/UploadForm';
 
 
 const Accueil=({setUploadFiles,uploadForm,setUploadForm})=>{
@@ -29,6 +29,10 @@ const Accueil=({setUploadFiles,uploadForm,setUploadForm})=>{
         progress: 0,
         etat: true, 
       }));
+
+      useEffect(()=>{
+        
+      },[])
       
       setUploadFiles((prev) => [...prev, ...uploadStatuses]);
 
@@ -302,7 +306,7 @@ return(
                         <tbody className="bg-white text-xs">
                             {Array.from({ length: 8 }).map((_, index) =>
                             <tr key={index} className="hover:bg-gray-200 items-center cursor-pointer">
-                                    <td className="py-2 px-6 flex text-sm items-center">
+                                    <td className="py-2 px-6 border-b flex text-sm items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" 
                                             width="20px" height="20px" viewBox="0 0 56 64" enableBackground="new 0 0 56 64" >
                                         <g>
@@ -324,7 +328,7 @@ return(
                                     </td>
                                     <td className="py-2 px-6 border-b border-gray-200 text-gray-500 text-12px">Ouvert par vous • 4 nov. 2024</td>
                                     <td className="py-2 px-6 border-b border-gray-200 text-gray-500 text-12px">johndoe@gmail.com</td>
-                                    <td className="py-2 cursor-pointer px-6 grid grid-cols-2">
+                                    <td className="py-2 border-b cursor-pointer px-6 grid grid-cols-2">
                                     <div className='relative items-center flex group'>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
