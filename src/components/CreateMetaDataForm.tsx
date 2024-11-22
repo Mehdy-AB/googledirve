@@ -9,7 +9,7 @@ const CreateMetaDataForm=({onClose,sidebarOpen,addMetaData,edit}:{onClose,sideba
     const [fields,setFields] =useState<{name:string,description:string}>({name:"",description:null})
 
     useEffect(()=>{
-        if(edit.metaData){
+        if(edit){
             setRuleLine(edit.metaData.ruleLine)
             setFields({name:edit.metaData.name,description:edit.metaData.description});
         }

@@ -173,9 +173,9 @@ const MetaData=({sidebarOpen})=>{
 
     return(
         <div className="h-full" >
-            {showForm && edit?
+            {showForm && (edit?
             <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} edit={{metaData:edit.data,update:updateMetaData,index:edit.index}}/>:
-            <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} />
+            <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} />)
             }
 
              <div className="p-10 mt-10 grid">
