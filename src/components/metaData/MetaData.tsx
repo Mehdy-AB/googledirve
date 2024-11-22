@@ -106,8 +106,8 @@ const MetaData=({sidebarOpen})=>{
   };
   
 
-  // Function to import data from Excel
-  const importFromExcel = (event: React.ChangeEvent<HTMLInputElement>) => {
+ // Function to import data from Excel
+ const importFromExcel = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
   
@@ -137,7 +137,6 @@ const MetaData=({sidebarOpen})=>{
 
   // Function to import data from CSV
   const importFromCsv = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("sss")
     const file = event.target.files?.[0];
     if (!file) return;
   
@@ -184,6 +183,18 @@ const MetaData=({sidebarOpen})=>{
                     <button onBlur={()=>setTimeout(() => {setDropDownMetaData(null)}, 150)} onClick={()=>{dropDownMetaData === -1? setTimeout(() => {setDropDownMetaData(null)}, 150):setTimeout(() => {setDropDownMetaData(-1)}, 150)}}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="rounded-full mr-2 bg-white cursor-pointer size-6">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                     </svg></button>
+                    <input id="Import-excel"
+                                                type="file"
+                                                accept=".xlsx, .xls"
+                                                className="hidden"
+                                                onChange={(e)=>{importFromExcel(e);e.target.value = "";}}
+                                            />
+                    <input id="Import-csv"
+                                                type="file"
+                                                accept=".csv"
+                                                className="hidden"
+                                                onChange={(e)=>{importFromCsv(e);e.target.value = "";}}
+                                            />
                     {dropDownMetaData === -1&&
                         <div className="z-30 absolute bg-white top-7 shadow-xl border py-2 right-44 ">
                             <button onClick={()=>setSelectedMetaData(metaData.map((_, index) => index))} className=" w-full pl-4 p-1 flex justify-start mt-2 items-center hover:bg-gray-200">
@@ -199,39 +210,37 @@ const MetaData=({sidebarOpen})=>{
                                             Delete ALL</button>
                                             <div className="border my-1"></div>
                             <button onClick={()=>exportToExcel([-1])} className="w-full pl-4 p-1 flex justify-start mt-2 items-center hover:bg-gray-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5 mr-1">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        <svg viewBox="0 0 24 24" fill="none" className={` size-6 mr-1 rounded-full`} xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 5L11.6464 4.64645L12 4.29289L12.3536 4.64645L12 5ZM12.5 14C12.5 14.2761 12.2761 14.5 12 14.5C11.7239 14.5 11.5 14.2761 11.5 14L12.5 14ZM6.64645 9.64645L11.6464 4.64645L12.3536 5.35355L7.35355 10.3536L6.64645 9.64645ZM12.3536 4.64645L17.3536 9.64645L16.6464 10.3536L11.6464 5.35355L12.3536 4.64645ZM12.5 5L12.5 14L11.5 14L11.5 5L12.5 5Z" fill="currentColor"/>
+                                        <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="currentColor"/>
                                         </svg>
                                             Export to excel</button>
                                         <button onClick={()=>exportToCsv([-1])} className=" w-full pl-4 p-1 flex justify-start items-center hover:bg-gray-200">
-                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" className="size-5 mr-1">
-                                        <path stroke="currentColor" strokeLinejoin="round" strokeWidth="2" d="M6 16H5a1 1 0 01-1-1V5a1 1 0 011-1h10a1 1 0 011 1v1M9 20h10a1 1 0 001-1V9a1 1 0 00-1-1H9a1 1 0 00-1 1v10a1 1 0 001 1z"/>
+                                        <svg viewBox="0 0 24 24" fill="none" className={` size-6 mr-1 rounded-full`} xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 5L11.6464 4.64645L12 4.29289L12.3536 4.64645L12 5ZM12.5 14C12.5 14.2761 12.2761 14.5 12 14.5C11.7239 14.5 11.5 14.2761 11.5 14L12.5 14ZM6.64645 9.64645L11.6464 4.64645L12.3536 5.35355L7.35355 10.3536L6.64645 9.64645ZM12.3536 4.64645L17.3536 9.64645L16.6464 10.3536L11.6464 5.35355L12.3536 4.64645ZM12.5 5L12.5 14L11.5 14L11.5 5L12.5 5Z" fill="currentColor"/>
+                                        <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="currentColor"/>
                                         </svg>
                                             Export to csv</button>
                                             <div className="border my-1"></div>
-                            <label htmlFor="Import-excel" className=" pl-4 p-1 w-full flex justify-start mt-2 items-center hover:bg-gray-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5 mr-1">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                    <label htmlFor="Import-excel" className=" pl-4 p-1 w-full grid grid-cols-2 mt-2 items-center hover:bg-gray-200">
+                                        <div className="flex justify-start">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className=" size-6 mr-1">
+                                        <path d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z" fill="currentColor"/>
+                                        <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="currentColor"/>
                                         </svg>
                                             Import from excel
-                                            <input id="Import-excel"
-                                                type="file"
-                                                accept=".xlsx, .xls"
-                                                className="hidden"
-                                                onChange={(e)=>{importFromExcel(e);e.target.value = "";}}
-                                            />
+                                        </div>
+                                        <div className="flex justify-end">
+
+                                        </div>
                                             </label>
                                         <label htmlFor="Import-csv" className=" w-full pl-4 p-1 flex justify-start items-center hover:bg-gray-200">
-                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" className="size-5 mr-1">
-                                        <path stroke="currentColor" strokeLinejoin="round" strokeWidth="2" d="M6 16H5a1 1 0 01-1-1V5a1 1 0 011-1h10a1 1 0 011 1v1M9 20h10a1 1 0 001-1V9a1 1 0 00-1-1H9a1 1 0 00-1 1v10a1 1 0 001 1z"/>
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className=" size-6 mr-1">
+                                        <path d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z" fill="currentColor"/>
+                                        <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="currentColor"/>
                                         </svg>
                                             Import from csv
-                                            <input id="Import-csv"
-                                                type="file"
-                                                accept=".csv"
-                                                className="hidden"
-                                                onChange={(e)=>{importFromCsv(e);e.target.value = "";}}
-                                            />
+                                            
                                             </label>
                                             
                                             <div className="border my-1"></div>

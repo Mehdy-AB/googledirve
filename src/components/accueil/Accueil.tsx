@@ -305,8 +305,8 @@ return(
                         </thead>
                         <tbody className="bg-white text-xs">
                             {Array.from({ length: 8 }).map((_, index) =>
-                            <tr key={index} className="hover:bg-gray-200 items-center cursor-pointer">
-                                    <td className="py-2 px-6 border-b flex text-sm items-center">
+                            <tr key={index} className="hover:bg-gray-200 border-b items-center cursor-pointer">
+                                    <td className="py-2 px-6  flex text-sm items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" 
                                             width="20px" height="20px" viewBox="0 0 56 64" enableBackground="new 0 0 56 64" >
                                         <g>
@@ -326,9 +326,9 @@ return(
                                             <path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
                                             </svg>
                                     </td>
-                                    <td className="py-2 px-6 border-b border-gray-200 text-gray-500 text-12px">Ouvert par vous • 4 nov. 2024</td>
-                                    <td className="py-2 px-6 border-b border-gray-200 text-gray-500 text-12px">johndoe@gmail.com</td>
-                                    <td className="py-2 border-b cursor-pointer px-6 grid grid-cols-2">
+                                    <td className="py-2 px-6  border-gray-200 text-gray-500 text-12px">Ouvert par vous • 4 nov. 2024</td>
+                                    <td className="py-2 px-6  border-gray-200 text-gray-500 text-12px">johndoe@gmail.com</td>
+                                    <td className="py-2  cursor-pointer px-6 grid grid-cols-2">
                                     <div className='relative items-center flex group'>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
