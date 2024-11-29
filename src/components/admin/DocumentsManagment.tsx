@@ -2,7 +2,7 @@
 const DocumentsManagment=()=>{
 
     return(
-        <div className="h-full w-full py-20 px-60 ">
+        <div className="h-full w-full py-10 px-60 ">
         <div className="grid items-start grid-cols-2">
             <div className="grid">
             <span className="text-xl font-semibold">File Manager - Folders</span>
@@ -153,9 +153,130 @@ const DocumentsManagment=()=>{
                     <span>2.gb</span>
                     <span>80</span>
                     <span>20</span>
-                    <span>2024-11-29T17:31:41.086Z</span>
-                    <span>2024-11-29T17:31:41.086Z</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
                 </div>
+                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
+                    <div className="flex items-center justify-start gap-2">
+                    <input type="checkbox" className=" bg-gray-400"/>
+                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                        </svg>
+                        name</span>
+                    </div>
+                    <span>2.gb</span>
+                    <span>80</span>
+                    <span>20</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
+                </div>
+                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
+                    <div className="flex items-center justify-start gap-2">
+                    <input type="checkbox" className=" bg-gray-400"/>
+                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                        </svg>
+                        name</span>
+                    </div>
+                    <span>2.gb</span>
+                    <span>80</span>
+                    <span>20</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
+                </div>
+                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
+                    <div className="flex items-center justify-start gap-2">
+                    <input type="checkbox" className=" bg-gray-400"/>
+                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                        </svg>
+                        name</span>
+                    </div>
+                    <span>2.gb</span>
+                    <span>80</span>
+                    <span>20</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
+                </div>
+                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
+                    <div className="flex items-center justify-start gap-2">
+                    <input type="checkbox" className=" bg-gray-400"/>
+                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                        </svg>
+                        name</span>
+                    </div>
+                    <span>2.gb</span>
+                    <span>80</span>
+                    <span>20</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
+                </div>
+                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
+                    <div className="flex items-center justify-start gap-2">
+                    <input type="checkbox" className=" bg-gray-400"/>
+                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                        </svg>
+                        name</span>
+                    </div>
+                    <span>2.gb</span>
+                    <span>80</span>
+                    <span>20</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
+                </div>
+                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
+                    <div className="flex items-center justify-start gap-2">
+                    <input type="checkbox" className=" bg-gray-400"/>
+                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                        </svg>
+                        name</span>
+                    </div>
+                    <span>2.gb</span>
+                    <span>80</span>
+                    <span>20</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
+                </div>
+                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
+                    <div className="flex items-center justify-start gap-2">
+                    <input type="checkbox" className=" bg-gray-400"/>
+                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                        </svg>
+                        name</span>
+                    </div>
+                    <span>2.gb</span>
+                    <span>80</span>
+                    <span>20</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
+                </div>
+                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
+                    <div className="flex items-center justify-start gap-2">
+                    <input type="checkbox" className=" bg-gray-400"/>
+                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                        </svg>
+                        name</span>
+                    </div>
+                    <span>2.gb</span>
+                    <span>80</span>
+                    <span>20</span>
+                    <span>2024-11-29T17:31</span>
+                    <span>2024-11-29T17:31</span>
+                </div>
+
             </div>
             </div>
         </div>

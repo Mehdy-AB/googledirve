@@ -173,7 +173,7 @@ return(
                         </td>
                         <td className="p-4 text-sm">
                         <div className="flex items-center cursor-pointer w-max">
-                            <img src='https://readymadeui.com/prouser_4.webp' className="w-9 h-9 rounded-full shrink-0" />
+                            <img src='https://readymadeui.com/profile_2.webp'className="w-9 h-9 rounded-full shrink-0" />
                             <div className="ml-4">
                             <p className="text-sm text-black">Gladys Jones</p>
                             <p className="text-xs text-gray-500 mt-0.5">gladys@example.com</p>
@@ -236,7 +236,7 @@ return(
                         </td>
                         <td className="p-4 text-sm">
                         <div className="flex items-center cursor-pointer w-max">
-                            <img src='https://readymadeui.com/prouser_5.webp' className="w-9 h-9 rounded-full shrink-0" />
+                            <img src='https://readymadeui.com/profile_2.webp' className="w-9 h-9 rounded-full shrink-0" />
                             <div className="ml-4">
                             <p className="text-sm text-black">Jennie Cooper</p>
                             <p className="text-xs text-gray-500 mt-0.5">jennie@example.com</p>
@@ -299,7 +299,7 @@ return(
                         </td>
                         <td className="p-4 text-sm">
                         <div className="flex items-center cursor-pointer w-max">
-                            <img src='https://readymadeui.com/prouser_3.webp' className="w-9 h-9 rounded-full shrink-0" />
+                            <img src='https://readymadeui.com/profile_2.webp' className="w-9 h-9 rounded-full shrink-0" />
                             <div className="ml-4">
                             <p className="text-sm text-black">Philip Steward</p>
                             <p className="text-xs text-gray-500 mt-0.5">philip@example.com</p>
@@ -361,7 +361,7 @@ return(
                         </td>
                         <td className="p-4 text-sm">
                         <div className="flex items-center cursor-pointer w-max">
-                            <img src='https://readymadeui.com/prouser_2.webp' className="w-9 h-9 rounded-full shrink-0" />
+                            <img src='https://readymadeui.com/profile_2.webp' className="w-9 h-9 rounded-full shrink-0" />
                             <div className="ml-4">
                             <p className="text-sm text-black">Jorge Black</p>
                             <p className="text-xs text-gray-500 mt-0.5">jorge@example.com</p>
@@ -423,7 +423,7 @@ return(
                         </td>
                         <td className="p-4 text-sm">
                         <div className="flex items-center cursor-pointer w-max">
-                            <img src='https://readymadeui.com/prouser_6.webp' className="w-9 h-9 rounded-full shrink-0" />
+                            <img src='https://readymadeui.com/profile_2.webp' className="w-9 h-9 rounded-full shrink-0" />
                             <div className="ml-4">
                             <p className="text-sm text-black">Evan Flores</p>
                             <p className="text-xs text-gray-500 mt-0.5">evan@example.com</p>
