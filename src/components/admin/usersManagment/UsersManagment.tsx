@@ -1,7 +1,7 @@
 
 const UsersManagment=()=>{
 return(
-    <div className="h-full w-full py-20 px-60 ">
+    <div className="h-full w-full py-10 px-60 ">
         <div className="grid items-start grid-cols-2">
             <div className="grid">
             <span className="text-xl font-semibold">User Manager - Users</span>
