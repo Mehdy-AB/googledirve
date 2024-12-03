@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
         try{
-          const res = await fetch(process.env.Backend_URL + "/api/v1/auth", {
+          const res = await fetch(process.env.Backend_URL + "/auth", {
             method: "POST",
             body: JSON.stringify({
               username: credentials.username,

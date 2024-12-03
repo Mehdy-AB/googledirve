@@ -1,5 +1,21 @@
+import axiosClient from "@/app/lib/axiosClient";
+import { signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 const DocumentsManagment=()=>{
+
+    const [folders, setFolders] = useState([]);
+
+    const getFolders=()=>{
+        axiosClient.get("/backReq/admin/folders")
+      .then((response) => setFolders(response.data))
+      .catch((error) => console.error(error));
+    }
+
+    useEffect(()=>{console.log(folders)},[folders])
+    useEffect(()=>{
+        getFolders();
+    },[]);
 
     return(
         <div className="h-full w-full py-10 px-60 ">
