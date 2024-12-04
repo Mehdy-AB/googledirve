@@ -1,3 +1,4 @@
+import { signOut } from "next-auth/react";
 import { useState } from "react";
 
 
@@ -242,7 +243,7 @@ const Header=({sidebarOpen,setUploadForm}:{sidebarOpen:boolean,setUploadForm:any
                                      </nav>
                                  </div>
                                  <div className="pt-2">
-                                     <button type="button" className="flex items-center space-x-3 py-3 px-4 w-full leading-6 text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md">
+                                     <button onClick={()=>{signOut()}} type="button" className="flex items-center space-x-3 py-3 px-4 w-full leading-6 text-lg text-gray-600 focus:outline-none hover:bg-gray-100 rounded-md">
                                          <svg className="w-7 h-7" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none">
                                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                              <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>

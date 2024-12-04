@@ -1,5 +1,4 @@
 import axiosClient from "@/app/lib/axiosClient";
-import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 const DocumentsManagment=()=>{
