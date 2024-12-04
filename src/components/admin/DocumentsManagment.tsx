@@ -7,9 +7,21 @@ const DocumentsManagment=()=>{
     const [folders, setFolders] = useState([]);
 
     const getFolders=()=>{
-        axiosClient.get("/backReq/admin/folders")
+        axiosClient.get("/backReq/admin/folders", {
+            params: { type:'all' }, // Add query parameters here
+          })
       .then((response) => setFolders(response.data))
       .catch((error) => console.error(error));
+    }
+
+    const createFolder=(folder:{name:string,parentId:number})=>{
+        axiosClient
+        .post("/backReq/admin/folders", {
+          folder_name: folder.name,
+          folder_parent_id: folder.parentId,
+        })
+        .then((response) => console.log(response.data))
+        .catch((error) => console.error(error));      
     }
 
     useEffect(()=>{console.log(folders)},[folders])
@@ -25,7 +37,7 @@ const DocumentsManagment=()=>{
             <span className="text-sm text-gray-400">File Manager - Folders</span>
             </div>
             <div className="flex items-end justify-end gap-2">
-            <button className="py-1 px-4 border bg-blue-400 text-white rounded-lg hover:opacity-80 font-[450]">create</button>
+            <button onClick={()=>createFolder({name:"hgg",parentId:1})} className="py-1 px-4 border bg-blue-400 text-white rounded-lg hover:opacity-80 font-[450]">create</button>
             <button className="flex items-center py-1 px-4 border bg-gray-200 rounded-lg hover:opacity-80 font-[450]">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4 mr-1">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
@@ -157,142 +169,50 @@ const DocumentsManagment=()=>{
                 <span>lastActive</span>
             </div>
             <div className="max-h-[50rem] overflow-y-auto ">
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
-                <div className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2">
-                    <div className="flex items-center justify-start gap-2">
-                    <input type="checkbox" className=" bg-gray-400"/>
-                    <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
-                        </svg>
-                        name</span>
-                    </div>
-                    <span>2.gb</span>
-                    <span>80</span>
-                    <span>20</span>
-                    <span>2024-11-29T17:31</span>
-                    <span>2024-11-29T17:31</span>
-                </div>
+                
+                {folders.map((folder) => (
+                    <div
+                        key={folder.id}
+                        className="items-center grid grid-cols-6 py-2 border-b pb-1 px-2"
+                    >
+                        {/* Name with Checkbox */}
+                        <div className="flex items-center justify-start gap-2">
+                        <input type="checkbox" className="bg-gray-400" />
+                        <span className="flex hover:text-blue-600 cursor-pointer items-center gap-1">
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-5 h-5"
+                            >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
+                            />
+                            </svg>
+                            {folder.name}
+                        </span>
+                        </div>
 
+                        {/* Size */}
+                        <span>{folder.documents.reduce((acc, doc) => acc + doc.size, 0)} MB</span>
+
+                        {/* Files Count */}
+                        <span>{folder.documents.length}</span>
+
+                        {/* SubFolders Count */}
+                        <span>{folder.subFolders?.length}</span>
+
+                        {/* Created At */}
+                        <span>{new Date(folder.createdAt).toLocaleString()}</span>
+
+                        {/* Last Active */}
+                        <span>{folder.documents[0]?.user.lastActive}</span>
+                    </div>
+                    ))}
             </div>
             </div>
         </div>

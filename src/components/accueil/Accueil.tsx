@@ -3,9 +3,13 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import UploadForm from '../../components/UploadForm';
+import { signOut } from 'next-auth/react';
 
 
 const Accueil=({setUploadFiles,uploadForm,setUploadForm})=>{
+    // useEffect(()=>{
+    //     signOut();
+    // },[])
     const [listForm,setListForm] =useState(true);
 
     const onDrop = async (

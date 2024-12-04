@@ -1,22 +1,58 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
+
+  const session = req.headers.get('authorization');
+  const { searchParams } = new URL(req.url);
+  const type = searchParams.get('type'); // e.g., 'all', 'folder', 'workspaces'
+  const folderId = searchParams.get('folderId'); // Required for type 'folder'
+
+  if (!session) {
+    return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
+  }
+
+  let endpoint: string;
+
+  switch (type) {
+    case 'all':
+      endpoint = `${process.env.Backend_URL}/folders`;
+      break;
+
+    case 'folder':
+      if (!folderId) {
+        return NextResponse.json({ error: 'folderId is required for type folder' }, { status: 400 });
+      }
+      endpoint = `${process.env.Backend_URL}/folders/${folderId}`;
+      break;
+
+    case 'workspaces':
+      endpoint = `${process.env.Backend_URL}/folders/workspaces`;
+      break;
+
+    default:
+      return NextResponse.json({ error: 'Invalid or missing type parameter' }, { status: 400 });
+  }
+  console.log(endpoint,session)
   try {
-    const session = req.headers.get('authorization');
-    const response = await fetch(process.env.Backend_URL+`/folders`, {
+
+
+    const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
-        'Authorization': session,
+        Authorization: session,
       },
     });
-   const res =(await response.json())
 
-    if(res.error)
-      return NextResponse.json({ error: res.message }, { status: 500 });
+    const res = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json({ error: res.message || 'Failed to fetch data' }, { status: response.status });
+    }
+
     return NextResponse.json(res);
   } catch (error) {
-    console.error(error)
-    return NextResponse.json({ error: 'Failed to get folders!' }, { status: 500 });
+    console.error('Error fetching data:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -46,71 +82,100 @@ export async function Post(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-    try {
-      // Parse JSON body
-      const jsonBody = await req.json();
-  
-      // Extract data from JSON
-      const data = JSON.stringify(jsonBody.data); // Ensure data is stringified
-      const session = req.headers.get('authorization');
-      const webid = req.nextUrl.searchParams.get('webid');
-      const productId = req.nextUrl.searchParams.get('productId');
-      const deviceHeader = req.headers.get('device');
-      
-  
-      const response = await fetch(process.env.Backend_URL+`/admin/products/update-prodact/${webid}/${productId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': session,
-          'device': deviceHeader, // Use the device header passed from the client
-          'Content-Type': 'application/json', // Specify content type
-        },
-        body: data, // Send stringified JSON data
-      });
-     const res =(await response.json())
-  
-      if(res.error){console.log(res.message)
-        return NextResponse.json({ error: res.message }, { status: 400 });}
-      return NextResponse.json(res);
-    } catch (error) {
-      
-      return NextResponse.json({ error: 'Failed to update product!' }, { status: 500 });
+  try {
+    const { searchParams } = new URL(req.url);
+    const type = searchParams.get('type'); // e.g., ?type=rename or ?type=replace
+    const jsonBody = await req.json();
+    const data = JSON.stringify(jsonBody.data);
+    const session = req.headers.get('authorization');
+
+    if (!session) {
+      return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
     }
+
+    if (!type || !['rename', 'replace'].includes(type)) {
+      return NextResponse.json({ error: 'Invalid or missing type parameter' }, { status: 400 });
+    }
+
+    const endpoint = getEndpoint(type);
+    const response = await fetch(endpoint, {
+      method: 'PUT',
+      headers: {
+        Authorization: session,
+        'Content-Type': 'application/json',
+      },
+      body: data,
+    });
+
+    const res = await response.json();
+
+    if (res.error) {
+      return NextResponse.json({ error: res.message }, { status: 400 });
+    }
+
+    return NextResponse.json(res);
+  } catch (error) {
+    console.error('Error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
+}
+
+function getEndpoint(type: string): string {
+  const baseURL = process.env.Backend_URL || '';
+  switch (type) {
+    case 'rename':
+      return `${baseURL}/folders/rename`;
+    case 'replace':
+      return `${baseURL}/folders/move`;
+    default:
+      throw new Error('Invalid type parameter');
+  }
+}
+
 
 export async function DELETE(req: NextRequest) {
+  try {
     const jsonBody = await req.json();
     const session = req.headers.get('authorization');
-    const dataJSON = JSON.stringify(jsonBody);
-    const deviceHeader = req.headers.get('device');
-    try {
-  
-      const webid = req.nextUrl.searchParams.get('webid');
-      
-      
-      if (!webid || !session || !deviceHeader) {
-        throw new Error('Missing required headers or parameters');
-      }
-  
-      const response = await fetch(
-        `${process.env.Backend_URL}/admin/products/delete-prodact/${webid}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Authorization': session, // Ensure the session is not null
-            'device': deviceHeader,   // Ensure the deviceHeader is not null
-            'Content-Type': 'application/json',
-          },
-          body:dataJSON
-        }
-      );
-      const data = await response.json();
-      if(data.error)
-        return NextResponse.json({ error: 'Failed to delete products!' }, { status: 400 });
-  
-      return NextResponse.json(data);
-    } catch (error) {
-      return NextResponse.json({ error: 'Failed to delete products!' }, { status: 500 });
+    const { searchParams } = new URL(req.url);
+
+    const folderId = searchParams.get('folderId');
+    const webid = searchParams.get('webid');
+
+    // Validate required parameters and headers
+    if (!folderId) {
+      return NextResponse.json({ error: 'Missing folderId parameter' }, { status: 400 });
     }
+
+    if (!webid) {
+      return NextResponse.json({ error: 'Missing webid parameter' }, { status: 400 });
+    }
+
+    if (!session) {
+      return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
+    }
+
+    const response = await fetch(`${process.env.Backend_URL}/folders/delete/${folderId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: session,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonBody),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return NextResponse.json(data, { status: 200 });
+    } else {
+      return NextResponse.json(
+        { error: data.error || 'Failed to delete the folder' },
+        { status: response.status }
+      );
+    }
+  } catch (error) {
+    console.error('Error deleting folder:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
-  
+}
