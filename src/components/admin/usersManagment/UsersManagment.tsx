@@ -12,11 +12,13 @@ const UsersManagment=()=>{
           })
       .then((response) => setUsers(response.data))
       .catch((error) => console.error(error));
+
     }
 
 
 
     useEffect(()=>{console.log(users)},[users])
+    
     useEffect(()=>{
         getusers();
     },[]);

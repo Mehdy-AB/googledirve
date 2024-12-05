@@ -1,11 +1,12 @@
 import { signOut } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const Header=({sidebarOpen,setUploadForm}:{sidebarOpen:boolean,setUploadForm:any})=>{
     const [uploadSection,setUploadSection] = useState(false);
     const [notification,setNotification] = useState(false);
     const [info,setinfo] = useState(false);
+
     const [profile,setProfile] = useState(false);
         return(
         <div className={`z-[98] fixed top-0 ${sidebarOpen?"left-[12rem] w-[calc(100%-12rem)] px-4":"left-[4rem] w-[calc(100%-4rem)] px-4"} h-[2.5rem] drop-shadow-md bg-foreground`}>

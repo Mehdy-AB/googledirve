@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function Post(req: NextRequest) {
+export async function POST(req: NextRequest) {
 // Parse JSON body
 const jsonBody = await req.json();
 // Extract data from JSON
@@ -67,19 +67,20 @@ console.log(data,session);
   try {
     
     const response = await fetch(process.env.Backend_URL+`/users/save`, {
-      method: 'Post',
+      method: 'POST',
       headers: {
         'Authorization': session,
       },
       body: data,
     });
-   const res =(await response.json())
+    
+   const res = await response.json();
 
     if(res.error)
       return NextResponse.json({ error: res.message }, { status: 500 });
     return NextResponse.json(res);
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return NextResponse.json({ error: 'Failed to create user!' }, { status: 500 });
   }
 }

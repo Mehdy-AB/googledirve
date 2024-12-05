@@ -6,7 +6,7 @@ interface User {
     jobTitle: string,
     username: string,
     password: string,
-    role: "ADMIN" | 'user',
+    role: "ADMIN" | 'USER',
     enabled: boolean
 };
 
@@ -18,7 +18,7 @@ const CreateUser=({onClose,sidebarOpen})=>{
     jobTitle: '',
     username: '',
     password: '',
-    role:'user',
+    role:'USER',
     enabled: true
     });
     const createUser=()=>{
@@ -101,7 +101,7 @@ const CreateUser=({onClose,sidebarOpen})=>{
                             </div>
                            {drop && <div className=" absolute border w-full left-0 top-14 py-3 bg-white rounded-md">
                                 <div onClick={()=>setUser({...user,role:'ADMIN'})} className="pl-6 hover:bg-gray-200 py-1">ADMIN</div>
-                                <div onClick={()=>setUser({...user,role:'user'})} className="pl-6 hover:bg-gray-200 py-1">USER</div>
+                                <div onClick={()=>setUser({...user,role:'USER'})} className="pl-6 hover:bg-gray-200 py-1">USER</div>
                             </div>}
                         </div>
                     </div>
