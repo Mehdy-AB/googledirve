@@ -4,40 +4,16 @@ export async function GET(req: NextRequest) {
   try {
     const session = req.headers.get('authorization');
     const { searchParams } = new URL(req.url);
-    const type = searchParams.get('type'); 
-    const userId = searchParams.get('userId');
-    const username = searchParams.get('username'); 
+    const groupId = searchParams.get('groupId');
 
     if (!session) {
       return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
     }
-  
-    let endpoint: string;
-  
-    switch (type) {
-      case 'all':
-        endpoint = `${process.env.Backend_URL}/users`;
-        break;
-  
-      case 'user':
-        if (!userId) {
-          return NextResponse.json({ error: 'userId is required for type folder' }, { status: 400 });
-        }
-        endpoint = `${process.env.Backend_URL}/users/${userId}`;
-        break;
-  
-      case 'search':
-        if (!username) {
-          return NextResponse.json({ error: 'username is required for type folder' }, { status: 400 });
-        }
-        endpoint = `${process.env.Backend_URL}/users/search/${username}`;
-        break;
-  
-      default:
-        return NextResponse.json({ error: 'Invalid or missing type parameter' }, { status: 400 });
-    }
 
-    const response = await fetch(endpoint, {
+    if (!groupId) 
+      return NextResponse.json({ error: 'groupid is missing' }, { status: 401 });
+
+    const response = await fetch(process.env.Backend_URL+`/groups/${groupId}/members`, {
       method: 'GET',
       headers: {
         Authorization: session,
@@ -64,8 +40,15 @@ export async function POST(req: NextRequest) {
     const jsonBody = await req.json();
     // Extract data from JSON
     const data = JSON.stringify(jsonBody.data); // Ensure data is stringified
+    const { searchParams } = new URL(req.url);
+    const groupId = searchParams.get('groupId');
+    const userId = searchParams.get('userId');
     const session = req.headers.get('authorization');
-    const response = await fetch(process.env.Backend_URL+`/users/save`, {
+
+    if (!groupId || !userId || !session) 
+      return NextResponse.json({ error: 'groupid is missing' }, { status: 401 });
+
+    const response = await fetch(process.env.Backend_URL+`/groups/${groupId}/users/${userId}/save`, {
       method: 'POST',
       headers: {
         'Authorization': session,
@@ -91,15 +74,15 @@ export async function PUT(req: NextRequest) {
     const jsonBody = await req.json();
     const data = JSON.stringify(jsonBody.data);
     const session = req.headers.get('authorization');
-    const userId = searchParams.get('userId');
+    const groupId = searchParams.get('groupId');
 
 
     if (!session) 
       return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
-    if (!userId) 
-      return NextResponse.json({ error: 'userid is missing' }, { status: 401 });
+    if (!groupId) 
+      return NextResponse.json({ error: 'groupid is missing' }, { status: 401 });
 
-    const response = await fetch(process.env.Backend_URL+`/users/update/${userId}`, {
+    const response = await fetch(process.env.Backend_URL+`/groups/update/${groupId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -126,18 +109,18 @@ export async function DELETE(req: NextRequest) {
     const session = req.headers.get('authorization');
     const { searchParams } = new URL(req.url);
 
+    const groupId = searchParams.get('groupId');
     const userId = searchParams.get('userId');
-
     // Validate required parameters and headers
-    if (!userId) {
-      return NextResponse.json({ error: 'Missing userId parameter' }, { status: 400 });
+    if (!groupId || !userId) {
+      return NextResponse.json({ error: 'Missing parameter' }, { status: 400 });
     }
 
     if (!session) {
       return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
     }
 
-    const response = await fetch(`${process.env.Backend_URL}/users/delete/${userId}`, {
+    const response = await fetch(`${process.env.Backend_URL}/groups/${groupId}/users/${userId}/delete`, {
       method: 'DELETE',
       headers: {
         Authorization: session,
@@ -150,12 +133,12 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json(data, { status: 200 });
     } else {
       return NextResponse.json(
-        { error: data.error || 'Failed to delete the user' },
+        { error: data.error || 'Failed to delete the group' },
         { status: response.status }
       );
     }
   } catch (error) {
-    console.error('Error deleting user:', error);
+    console.error('Error deleting group:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

@@ -1,35 +1,36 @@
 import axiosClient from "@/app/lib/axiosClient";
 import { useState } from "react";
-interface User {
-    fullName: string,
-    email: string,
-    jobTitle: string,
-    username: string,
-    password: string,
-    role: "ADMIN" | 'USER',
-    enabled: boolean
-};
+import { User } from "../usersManagment/UsersManagment";
 
-const CreateUser=({onClose,sidebarOpen})=>{
+const CreateUser=({onClose,sidebarOpen,fetch,EditUser,update})=>{
     const [drop,setDrop]=useState(false)
-    const [user,setUser]=useState<User>({
-    fullName: '',
-    email: '',
-    jobTitle: '',
-    username: '',
-    password: '',
-    role:'USER',
-    enabled: true
-    });
+    const [user,setUser]=useState<User>(
+        EditUser
+          ? {
+              fullName: EditUser.fullName,
+              email: EditUser.email,
+              jobTitle: EditUser.jobTitle,
+              username: EditUser.username,
+              password: EditUser.password,
+              role: EditUser.role,
+              enabled: EditUser.enabled, // Fixed property
+            }
+          : {
+              fullName: '',
+              email: '',
+              jobTitle: '',
+              username: '',
+              password: '',
+              role: 'USER',
+              enabled: true, // Default value
+            }
+      );
+
     const createUser=()=>{
-        console.log(user)
-
         axiosClient.post("/backReq/admin/users", {data:user})
-        .then((response) => console.log(response))
+        .then(() => fetch())
         .catch((error) => console.error(error));
-
-
-      //onClose();
+        onClose();
     }
 
     const handleChange = (e: any) => {
@@ -57,7 +58,7 @@ const CreateUser=({onClose,sidebarOpen})=>{
                         <label htmlFor="fName" className="mb-3 block text-base font-medium">
                             Full Name
                         </label>
-                        <input onChange={handleChange} type="text" name="fullName" id="fullName" placeholder="FullName"
+                        <input defaultValue={user.fullName} onChange={handleChange} type="text" name="fullName" id="fullName" placeholder="FullName"
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-secondColor focus:shadow-md" required />
                     </div>
                 </div>
@@ -66,7 +67,7 @@ const CreateUser=({onClose,sidebarOpen})=>{
                         <label htmlFor="lName" className="mb-3 block text-base font-medium">
                             UserName
                         </label>
-                        <input onChange={handleChange} type="text" name="username" id="username" placeholder="userName"
+                        <input defaultValue={user.username} onChange={handleChange} type="text" name="username" id="username" placeholder="userName"
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-secondColor focus:shadow-md" required />
                     </div>
                 </div>
@@ -75,7 +76,7 @@ const CreateUser=({onClose,sidebarOpen})=>{
                 <label htmlFor="email" className="mb-3 block text-base font-medium">
                     Email
                 </label>
-                <input onChange={handleChange} type="text" name="email" id="email" placeholder="user@example.com"
+                <input defaultValue={user.email} onChange={handleChange} type="text" name="email" id="email" placeholder="user@example.com"
                     className="w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-secondColor focus:shadow-md" required />
             </div>
             <div className="mb-2">
@@ -111,7 +112,7 @@ const CreateUser=({onClose,sidebarOpen})=>{
                         <label htmlFor="Job" className="mb-3 block text-base font-medium">
                             Job Tiltle
                         </label>
-                        <input onChange={handleChange} type="text" name="jobTitle" id="jobTitle"
+                        <input defaultValue={user.jobTitle} onChange={handleChange} type="text" name="jobTitle" id="jobTitle"
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-secondColor focus:shadow-md" />
                     </div>
                 </div>
@@ -122,7 +123,7 @@ const CreateUser=({onClose,sidebarOpen})=>{
                    Voulez-vous activer cet utilisateur ?
                 </label>
                 <label className="relative cursor-pointer">
-                                        <input type="checkbox" className="sr-only peer" defaultChecked={true} onChange={()=>setUser({...user,enabled:!user.enabled})} />
+                                        <input type="checkbox" className="sr-only peer" defaultChecked={user.enabled} onChange={()=>setUser({...user,enabled:!user.enabled})} />
                                         <div
                                             className="w-11 h-6 flex items-center bg-gray-300 rounded-full peer peer-checked:after:translate-x-full after:absolute after:left-[2px] peer-checked:after:border-white after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#007bff]">
                                         </div>
@@ -130,9 +131,9 @@ const CreateUser=({onClose,sidebarOpen})=>{
             </div>
 
             <div className="flex justify-center">
-                <button onClick={createUser}
+                <button onClick={()=>{EditUser?update(user,EditUser.id):createUser()}}
                     className="hover:shadow-form  rounded-md bg-secondColor py-3 px-32 text-center text-base font-semibold text-white outline-none">
-                    Créer 
+                    {EditUser?'Mise à jour':'Créer'}
                 </button>
             </div>
         </div>
