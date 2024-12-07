@@ -38,13 +38,12 @@ export async function GET(req: NextRequest) {
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
-        "Accept": "application/json",
         Authorization: session,
       },
     });
 
     const res = await response.json();
-    
+
     if (!response.ok) {
       return NextResponse.json({ error: res.message || 'Failed to fetch data' }, { status: response.status });
     }
@@ -56,25 +55,21 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function Post(req: NextRequest) {
     // Parse JSON body
     const jsonBody = await req.json();
     // Extract data from JSON
     const data = JSON.stringify(jsonBody.data); // Ensure data is stringified
-    console.log(data)
   try {
     const session = req.headers.get('authorization');
     const response = await fetch(process.env.Backend_URL+`/folders/save`, {
-      method: 'POST',
+      method: 'Post',
       headers: {
-        "Accept": "application/json",
-        'Content-Type': 'application/json',
         'Authorization': session,
       },
       body: data,
     });
    const res =(await response.json())
-
     if(res.error)
       return NextResponse.json({ error: res.message }, { status: 500 });
     return NextResponse.json(res);

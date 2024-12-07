@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import CreateMetaDataForm from "../CreateMetaDataForm";
+import axiosClient from "@/app/lib/axiosClient";
+
 import * as XLSX from "xlsx";
 export interface Rule {
     name: string;
@@ -16,9 +18,28 @@ export interface data {
   }
 
 const MetaData=({sidebarOpen})=>{
+
+
+
+
     const [metaData,setMetaData] = useState<data[]>([
-        { name: "File", activate: false, createdAt: "2024-11-19T20:09:41.080726", ruleLine: [ { name: "Filename", type: "Text", obligatory: true, position: 1 } ] }, { name: "ddd", activate: false, createdAt: "2024-11-21T13:21:46.327944", ruleLine: [ { name: "name", type: "Text", obligatory: false, position: null } ] }
+       //{ name: "File", activate: false, createdAt: "2024-11-19T20:09:41.080726", ruleLine: [ { name: "Filename", type: "Text", obligatory: true, position: 1 } ] }, { name: "ddd", activate: false, createdAt: "2024-11-21T13:21:46.327944", ruleLine: [ { name: "name", type: "Text", obligatory: false, position: null } ] }
     ]);
+
+    const getMetaData = () => {
+      axiosClient
+          .get("/backReq/admin/metadata", { params: { type: "all" } })
+          .then((response) => {
+            setMetaData(response.data); // Display subfolders and files of the clicked folder
+            console.log(response.data);
+          })
+          .catch((error) => console.error(error));
+      };
+
+
+  useEffect(getMetaData,[]);
+
+
     const [edit,setEdit]=useState<{data:data,index:number} | null>(null)
     const [showForm,setShowForm] = useState(false);
     const [dropDownMetaData,setDropDownMetaData] = useState<number | null>(null);
@@ -26,6 +47,15 @@ const MetaData=({sidebarOpen})=>{
 
     const addRuleLine=(ruleLine)=>{
         setMetaData([...metaData,{...ruleLine,activate:false,createdAt:new Date()}]);
+
+        ///save it to back end 
+          axiosClient
+          .post("/backReq/admin/metadata", {data:ruleLine})
+          .then((response) => {
+            setMetaData(response.data); // Display subfolders and files of the clicked folder
+          })
+          .catch((error) => console.error(error));
+
     }
     
       // Function to delete items by array of indexes

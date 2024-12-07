@@ -14,6 +14,7 @@ const CreateMetaDataForm=({onClose,sidebarOpen,addMetaData,edit}:{onClose,sideba
             setFields({name:edit.metaData.name,description:edit.metaData.description});
         }
     },[])
+
     const handleClose = (e) => {
         if (e.target.id === 'wrapper') onClose();
       };
@@ -41,11 +42,14 @@ const CreateMetaDataForm=({onClose,sidebarOpen,addMetaData,edit}:{onClose,sideba
       const onDeleteRule = (index: number) => {
         setRuleLine((prev) => prev.filter((_, i) => i !== index));
       };
+      
       const [typeDrop,setTypeDrop]= useState<number | null>(null);
 
       const onCreate=()=>{
         const metaData = {name:fields.name,description:fields.description,ruleLine:ruleLine};
-        addMetaData(metaData)
+        addMetaData(metaData);
+
+
       }
 
     return(

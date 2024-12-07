@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-
-
   try {
     const session = req.headers.get('authorization');
     const { searchParams } = new URL(req.url);
-    const type = searchParams.get('type'); // e.g., 'all', 'folder', 'workspaces'
-    const folderId = searchParams.get('folderId'); // Required for type 'folder'
-  
+    const type = searchParams.get('type'); 
+    const userId = searchParams.get('userId');
+    const username = searchParams.get('username'); 
+
     if (!session) {
       return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
     }
@@ -17,18 +16,21 @@ export async function GET(req: NextRequest) {
   
     switch (type) {
       case 'all':
-        endpoint = `${process.env.Backend_URL}/folders`;
+        endpoint = `${process.env.Backend_URL}/rules`;
         break;
   
-      case 'folder':
-        if (!folderId) {
-          return NextResponse.json({ error: 'folderId is required for type folder' }, { status: 400 });
+      case 'user':
+        if (!userId) {
+          return NextResponse.json({ error: 'userId is required for type folder' }, { status: 400 });
         }
-        endpoint = `${process.env.Backend_URL}/folders/${folderId}`;
+        endpoint = `${process.env.Backend_URL}/users/${userId}`;
         break;
   
-      case 'workspaces':
-        endpoint = `${process.env.Backend_URL}/folders/workspaces`;
+      case 'search':
+        if (!username) {
+          return NextResponse.json({ error: 'username is required for type folder' }, { status: 400 });
+        }
+        endpoint = `${process.env.Backend_URL}/users/search/${username}`;
         break;
   
       default:
@@ -40,11 +42,11 @@ export async function GET(req: NextRequest) {
       headers: {
         "Accept": "application/json",
         Authorization: session,
+        
       },
     });
 
     const res = await response.json();
-    
     if (!response.ok) {
       return NextResponse.json({ error: res.message || 'Failed to fetch data' }, { status: response.status });
     }
@@ -57,55 +59,48 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  try {
     // Parse JSON body
     const jsonBody = await req.json();
     // Extract data from JSON
     const data = JSON.stringify(jsonBody.data); // Ensure data is stringified
-    console.log(data)
-  try {
     const session = req.headers.get('authorization');
-    const response = await fetch(process.env.Backend_URL+`/folders/save`, {
+    const response = await fetch(process.env.Backend_URL+`/rules/save`, {
       method: 'POST',
       headers: {
-        "Accept": "application/json",
-        'Content-Type': 'application/json',
         'Authorization': session,
+        'Content-Type': 'application/json',
       },
       body: data,
     });
-   const res =(await response.json())
+    
+   const res = await response.json();
 
     if(res.error)
       return NextResponse.json({ error: res.message }, { status: 500 });
     return NextResponse.json(res);
   } catch (error) {
-    console.error(error)
-    return NextResponse.json({ error: 'Failed to create folders!' }, { status: 500 });
+    console.log(error)
+    return NextResponse.json({ error: 'Failed to create rules!' }, { status: 500 });
   }
 }
 
 export async function PUT(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const type = searchParams.get('type'); // e.g., ?type=rename or ?type=replace
     const jsonBody = await req.json();
     const data = JSON.stringify(jsonBody.data);
     const session = req.headers.get('authorization');
 
-    if (!session) {
+
+    if (!session) 
       return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
-    }
 
-    if (!type || !['rename', 'replace'].includes(type)) {
-      return NextResponse.json({ error: 'Invalid or missing type parameter' }, { status: 400 });
-    }
-
-    const endpoint = getEndpoint(type);
-    const response = await fetch(endpoint, {
+    const response = await fetch(process.env.Backend_URL+`/rules/update`, {
       method: 'PUT',
       headers: {
-        Authorization: session,
         'Content-Type': 'application/json',
+        'Authorization': session,
       },
       body: data,
     });
@@ -123,48 +118,27 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-function getEndpoint(type: string): string {
-  const baseURL = process.env.Backend_URL || '';
-  switch (type) {
-    case 'rename':
-      return `${baseURL}/folders/rename`;
-    case 'replace':
-      return `${baseURL}/folders/move`;
-    default:
-      throw new Error('Invalid type parameter');
-  }
-}
-
-
 export async function DELETE(req: NextRequest) {
   try {
-    const jsonBody = await req.json();
     const session = req.headers.get('authorization');
     const { searchParams } = new URL(req.url);
 
-    const folderId = searchParams.get('folderId');
-    const webid = searchParams.get('webid');
+    const userId = searchParams.get('userId');
 
     // Validate required parameters and headers
-    if (!folderId) {
-      return NextResponse.json({ error: 'Missing folderId parameter' }, { status: 400 });
-    }
-
-    if (!webid) {
-      return NextResponse.json({ error: 'Missing webid parameter' }, { status: 400 });
+    if (!userId) {
+      return NextResponse.json({ error: 'Missing userId parameter' }, { status: 400 });
     }
 
     if (!session) {
       return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
     }
 
-    const response = await fetch(`${process.env.Backend_URL}/folders/delete/${folderId}`, {
+    const response = await fetch(`${process.env.Backend_URL}/users/delete/${userId}`, {
       method: 'DELETE',
       headers: {
         Authorization: session,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(jsonBody),
     });
 
     const data = await response.json();
@@ -173,12 +147,12 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json(data, { status: 200 });
     } else {
       return NextResponse.json(
-        { error: data.error || 'Failed to delete the folder' },
+        { error: data.error || 'Failed to delete the user' },
         { status: response.status }
       );
     }
   } catch (error) {
-    console.error('Error deleting folder:', error);
+    console.error('Error deleting user:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
