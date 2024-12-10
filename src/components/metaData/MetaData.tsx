@@ -3,6 +3,7 @@ import CreateMetaDataForm from "../CreateMetaDataForm";
 import axiosClient from "@/app/lib/axiosClient";
 
 import * as XLSX from "xlsx";
+import UploadForm from "../UploadForm";
 export interface Rule {
     name: string;
     type: "Text" | "Boolean" | "Number" | "Date";
@@ -203,6 +204,7 @@ const MetaData=({sidebarOpen})=>{
 
     return(
         <div className="h-full" >
+          <UploadForm onClose={()=>setShowForm(false) } sidebarOpen={false}/>
             {showForm && (edit?
             <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} edit={{metaData:edit.data,update:updateMetaData,index:edit.index}}/>:
             <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} />)
