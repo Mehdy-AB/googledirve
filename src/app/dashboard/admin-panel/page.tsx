@@ -18,16 +18,12 @@ const adminPanel=()=>{
     return(
         <DefualtLayout setSidebarOpen={setSidebarOpen} setUploadFiles={setUploadFiles} setUploadForm={setUploadForm} sidebarOpen={sidebarOpen} uploadFiles={uploadFiles} uploadForm={uploadForm}>
           <div>
-            <div className=" flex mx-[30%] border-t-2 justify-center  ">
-               <button onClick={()=>{setAdminTab(1)}} className={`${adminTab===1?"bg-blue-400 text-white border-blue-300":"bg-white hover:bg-gray-100"} rounded-b-3xl border-l border-r mx-1 shadow-lg hover:shadow-md border-b  py-2 px-6 text-lg`}>Work Flow</button>
-               <div className="relative ">
-               <button onClick={()=>{setAdminTab(2)}} className={`${(adminTab ===2 || adminTab ===4)?"bg-blue-400 text-white ":"bg-white hover:bg-gray-100"} rounded-b-3xl border-l border-r mx-1 shadow-lg hover:shadow-md border-b  py-2 px-6 text-lg`}>Uitlisateur statistic</button>
-                {(adminTab ===2 || adminTab ===4)&&<div className=" absolute ml-8 ">
-                <button onClick={()=>{setAdminTab(2)}} className={`${adminTab===2?"bg-blue-400 text-white border-blue-300":"bg-white hover:bg-gray-100"} rounded-bl-2xl border-l border-r shadow-lg hover:shadow-md border-b py-1  px-2 text-md`}>Users</button>
-                <button onClick={()=>{setAdminTab(4)}} className={`${adminTab===4?"bg-blue-400 text-white border-blue-300":"bg-white hover:bg-gray-100"} rounded-br-2xl border-l border-r shadow-lg hover:shadow-md border-b py-1 px-2 text-md`}>Groups</button>
-                </div>}
-               </div>
-                <button onClick={()=>{setAdminTab(3)}} className={`${adminTab===3?"bg-blue-400 text-white border-blue-300":"bg-white hover:bg-gray-100"} rounded-b-3xl border-l border-r mx-1 shadow-lg hover:shadow-md border-b  py-2 px-6 text-lg`}> Gestion Documents</button>              
+            <div className=" flex mx-[30%] border-t-2 gap-1 justify-center  ">
+               <button onClick={()=>{setAdminTab(1)}} className={`${adminTab===1?"bg-blue-400 text-white border-blue-300":"bg-white hover:bg-gray-100"} rounded-b-3xl border-l border-r shadow-lg hover:shadow-md border-b  py-2 px-6 text-lg`}>Work Flow</button>
+               <button onClick={()=>{setAdminTab(2)}} className={`${(adminTab ===2)?"bg-blue-400 text-white ":"bg-white hover:bg-gray-100"} rounded-b-3xl border-l border-r shadow-lg hover:shadow-md border-b  py-2 px-6 text-lg`}>Uitlisateur</button>
+               <button onClick={()=>{setAdminTab(3)}} className={`${adminTab===3?"bg-blue-400 text-white border-blue-300":"bg-white hover:bg-gray-100"} rounded-b-3xl border-l border-r shadow-lg hover:shadow-md border-b  py-2 px-6 text-lg`}> Documents</button>   
+               <button onClick={()=>{setAdminTab(4)}} className={`${adminTab===4?"bg-blue-400 text-white border-blue-300":"bg-white hover:bg-gray-100"} rounded-b-3xl border-l border-rshadow-lg hover:shadow-md border-b  py-2 px-6 text-lg`}>System</button>
+           
             </div>
             <AdminPanels panel={adminTab} />
           </div>
