@@ -1,16 +1,26 @@
+"use client"
+
 import axiosClient from "@/app/lib/axiosClient";
+import Files from "@/components/admin/FoldersComponents/Files";
+import Folder from "@/components/admin/FoldersComponents/Folder";
+import DefualtLayout from "@/components/defualtLayout/DefualtLayout";
+import { useLayoutContext } from "@/components/myContext/myContext";
 import { useEffect, useState } from "react";
-import FolderDisplay from "./FoldersComponents/FolderDisplay";
-import FolderDisplayTow from "./FoldersComponents/FolderDisplayTow";
-import Folder from "./FoldersComponents/Folder";
 
-const DocumentsManagment=()=>{
 
+const documentsManagment=()=>{
+    const {
+        sidebarOpen,
+        setSidebarOpen,
+        uploadForm,
+        setUploadForm,
+        uploadFiles,
+        setUploadFiles,
+      } = useLayoutContext();
     const [folders, setFolders] = useState([]);
     const [currentView, setCurrentView] = useState(null); 
     const [breadcrumb, setBreadcrumb] = useState<{folder:string,id:number}[]>([]);  //
     const [panel, setPanel] = useState<'folders'|'files'|'settings'>('folders');
-    
     const getWorkspaces = () => {
 
         axiosClient
@@ -24,6 +34,13 @@ const DocumentsManagment=()=>{
     };
 
  const getFolder = (folderId,name) => {
+    if(folderId===-1){
+        setCurrentView(null)
+        setBreadcrumb([])
+        getWorkspaces();
+        return;
+    }
+    
     setBreadcrumb([...breadcrumb,{folder:name,id:folderId}]);
     axiosClient
         .get("/backReq/admin/folders", { params: { type: "folder", folderId } })
@@ -33,8 +50,6 @@ const DocumentsManagment=()=>{
         .catch((error) => console.error(error));
         
     };
-
-    
 
     const createFolder=(name:string)=>{
         axiosClient
@@ -52,6 +67,7 @@ const DocumentsManagment=()=>{
     },[]);
 
     return(
+        <DefualtLayout setSidebarOpen={setSidebarOpen} setUploadFiles={setUploadFiles} setUploadForm={setUploadForm} sidebarOpen={sidebarOpen} uploadFiles={uploadFiles} uploadForm={uploadForm}>
         <div className="h-full w-full py-10 px-60 ">
         <div className="grid items-start grid-cols-2">
             <div className="grid">
@@ -92,10 +108,10 @@ const DocumentsManagment=()=>{
             <span onClick={()=>setPanel('settings')} className={`${panel==='settings'?'text-blue-400 border-b-2 border-blue-400':'hover:text-blue-400 text-gray-500 border-b-2'} cursor-pointer hover:border-blue-400`}>Settings</span>
             </div>
         </div>
-        <Folder createFolder={createFolder} setBreadcrumb={setBreadcrumb} breadcrumb={breadcrumb} goFile={()=>{setPanel('files')}} folders={folders} currentView={currentView} getFolder={getFolder}/>
-
-
+        {panel==='folders'&&<Folder createFolder={createFolder} setBreadcrumb={setBreadcrumb} breadcrumb={breadcrumb} goFile={()=>{setPanel('files')}} folders={folders} currentView={currentView} getFolder={getFolder}/>}
+        {panel==='files'&& currentView && <Files folder={currentView}/>}
         </div>
+        </DefualtLayout>
     );
 }
-export default DocumentsManagment;
+export default documentsManagment;

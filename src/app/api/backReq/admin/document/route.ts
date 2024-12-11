@@ -55,27 +55,84 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function Post(req: NextRequest) {
-    // Parse JSON body
-    const jsonBody = await req.json();
-    // Extract data from JSON
-    const data = JSON.stringify(jsonBody.data); // Ensure data is stringified
+export async function POST(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+    const type = searchParams.get('type');
+    const folderId = searchParams.get('folderId');
+    const ruleId = searchParams.get('ruleId');
+    const metadata = searchParams.get('metadata');
     const session = req.headers.get('authorization');
-    const response = await fetch(process.env.Backend_URL+`/folders/save`, {
-      method: 'Post',
-      headers: {
-        'Authorization': session,
-      },
-      body: data,
-    });
-   const res =(await response.json())
-    if(res.error)
-      return NextResponse.json({ error: res.message }, { status: 500 });
-    return NextResponse.json(res);
+
+    if (!session) {
+      return NextResponse.json(
+        { error: 'Authorization header is missing' },
+        { status: 401 }
+      );
+    }
+
+    if (type === 'upload') {
+      if (!folderId || !ruleId || !metadata) {
+        return NextResponse.json(
+          { error: 'Missing required query parameters for upload' },
+          { status: 400 }
+        );
+      }
+
+      const formData = new FormData();
+
+      // Simulate receiving file and other data
+      const jsonBody = await req.json();
+      const file = new Blob([JSON.stringify(jsonBody.data)], {
+        type: 'application/json',
+      }); // Example: Replace with actual file data from request
+
+      formData.append('file', file); // Add file
+      formData.append('folderId', folderId); // Add other fields
+      formData.append('ruleId', ruleId);
+      formData.append('metadata', metadata);
+
+      const queryParams = new URLSearchParams({
+        folderId,
+        ruleId,
+        metadata,
+      });
+
+      const response = await fetch(
+        `${process.env.Backend_URL}/documents/upload?${queryParams.toString()}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: session, // Add only Authorization, don't manually set Content-Type
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        return NextResponse.json(
+          { error: errorResponse.message || 'Failed to upload' },
+          { status: response.status }
+        );
+      }
+
+      const res = await response.json();
+      return NextResponse.json(res);
+    } else if (type === 'favorite') {
+      return NextResponse.json({ message: 'Favorite feature not implemented' });
+    } else {
+      return NextResponse.json(
+        { error: 'Invalid or missing type parameter' },
+        { status: 400 }
+      );
+    }
   } catch (error) {
-    console.error(error)
-    return NextResponse.json({ error: 'Failed to create folders!' }, { status: 500 });
+    console.error('Error processing request:', error);
+    return NextResponse.json(
+      { error: 'An unexpected error occurred' },
+      { status: 500 }
+    );
   }
 }
 

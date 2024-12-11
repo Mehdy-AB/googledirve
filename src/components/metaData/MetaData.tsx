@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import CreateMetaDataForm from "../CreateMetaDataForm";
 import axiosClient from "@/app/lib/axiosClient";
-
 import * as XLSX from "xlsx";
-import UploadForm from "../UploadForm";
 export interface Rule {
     name: string;
     type: "Text" | "Boolean" | "Number" | "Date";
@@ -19,20 +17,13 @@ export interface data {
   }
 
 const MetaData=({sidebarOpen})=>{
-
-
-
-
-    const [metaData,setMetaData] = useState<data[]>([
-       //{ name: "File", activate: false, createdAt: "2024-11-19T20:09:41.080726", ruleLine: [ { name: "Filename", type: "Text", obligatory: true, position: 1 } ] }, { name: "ddd", activate: false, createdAt: "2024-11-21T13:21:46.327944", ruleLine: [ { name: "name", type: "Text", obligatory: false, position: null } ] }
-    ]);
+    const [metaData,setMetaData] = useState<data[]>([]);
 
     const getMetaData = () => {
       axiosClient
           .get("/backReq/admin/metadata", { params: { type: "all" } })
           .then((response) => {
             setMetaData(response.data); // Display subfolders and files of the clicked folder
-            console.log(response.data);
           })
           .catch((error) => console.error(error));
       };
@@ -204,7 +195,6 @@ const MetaData=({sidebarOpen})=>{
 
     return(
         <div className="h-full" >
-          <UploadForm onClose={()=>setShowForm(false) } sidebarOpen={false}/>
             {showForm && (edit?
             <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} edit={{metaData:edit.data,update:updateMetaData,index:edit.index}}/>:
             <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} />)

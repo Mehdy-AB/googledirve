@@ -105,11 +105,14 @@ const Folder = ({
 
       <div className="grid mt-6 items-center grid-cols-2">
         <div className="gap-1 flex w-fit items-center px-2 text-blue-500 font-[500] rounded bg-blue-200">
-          <svg
+          <svg 
+            onClick={() => {
+              getFolder(-1);
+            }}
             viewBox="0 0 24 24"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
-            className="size-5"
+            className="size-5 underline cursor-pointer"
           >
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
               <g
@@ -136,8 +139,8 @@ const Folder = ({
             </g>
           </svg>
           <span className="gap-1 items-center flex">
-            {breadcrumb.map((folder) => (
-              <>
+            {breadcrumb.map((folder,index) => (
+              <div className="flex" key={index}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -163,7 +166,7 @@ const Folder = ({
                 >
                   {folder.folder}
                 </span>
-              </>
+              </div>
             ))}
           </span>
         </div>
