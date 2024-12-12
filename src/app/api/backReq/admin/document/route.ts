@@ -59,9 +59,13 @@ export async function POST(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type');
-    const folderId = searchParams.get('folderId');
-    const ruleId = searchParams.get('ruleId');
-    const metadata = searchParams.get('metadata');
+    const formData = await req.formData();
+
+    // Extract fields from formData
+    const file = formData.get('file') as File; // Get the uploaded file
+    const folderId = formData.get('folderId');
+    const ruleId = formData.get('ruleId');
+    const metadata = formData.get('metadata');
     const session = req.headers.get('authorization');
 
     if (!session) {
@@ -80,26 +84,13 @@ export async function POST(req: NextRequest) {
       }
 
       const formData = new FormData();
-
-      // Simulate receiving file and other data
-      const jsonBody = await req.json();
-      const file = new Blob([JSON.stringify(jsonBody.data)], {
-        type: 'application/json',
-      }); // Example: Replace with actual file data from request
-
       formData.append('file', file); // Add file
       formData.append('folderId', folderId); // Add other fields
       formData.append('ruleId', ruleId);
       formData.append('metadata', metadata);
 
-      const queryParams = new URLSearchParams({
-        folderId,
-        ruleId,
-        metadata,
-      });
-
       const response = await fetch(
-        `${process.env.Backend_URL}/documents/upload?${queryParams.toString()}`,
+        `${process.env.Backend_URL}/documents/upload`,
         {
           method: 'POST',
           headers: {
@@ -117,8 +108,7 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const res = await response.json();
-      return NextResponse.json(res);
+      return NextResponse.json(response);
     } else if (type === 'favorite') {
       return NextResponse.json({ message: 'Favorite feature not implemented' });
     } else {

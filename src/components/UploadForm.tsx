@@ -1,4 +1,5 @@
 import axiosClient from "@/app/lib/axiosClient";
+import { error } from "console";
 import { useEffect, useRef, useState } from "react";
 
 
@@ -34,14 +35,19 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
             "createdAt": string,
             "ruleLine": any[]}>(null);
     const [metadataValues, setMetadataValues] = useState([]);
-    useEffect(()=>{
-        if(!selectedModele){setMetadataValues([]);return;}
-
-        setMetadataValues(selectedModele.ruleLine.reduce((acc: any, metaData: any) => {
-            acc[metaData.name] = ''; // Initialize each metadata field with an empty string
-            return acc;
-          }, {}))
-    },[selectedModele]);
+    useEffect(() => {
+        if (!selectedModele) {
+          setMetadataValues([]);
+          return;
+        }
+      
+        setMetadataValues(
+          selectedModele.ruleLine.map((metaData: any) => ({
+            ruleLineId: metaData.id, // Assuming `id` is the unique identifier for ruleLine
+            value: '', // Initialize each metadata field with an empty value
+          }))
+        );
+      }, [selectedModele]);
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -59,13 +65,14 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
     };
 
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, ruleLineId: number) => {
         const { value } = e.target;
-        setMetadataValues((prev) => ({
-          ...prev,
-          [name]: value, // Update the value for the specific field
-        }));
-      };
+        setMetadataValues((prev) =>
+          prev.map((item) =>
+            item.ruleLineId === ruleLineId ? { ...item, value } : item
+          )
+        );
+      };      
 
     const [pdfSrc, setPdfSrc] = useState<string | null>(null);
 
@@ -86,18 +93,24 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
     };
 
       const handleUpload = async () => {
-        if (!file) return alert("Please select a file to upload");
-        const missingFields = selectedModele.ruleLine.filter((metaData: any) => {
-            const value = metadataValues[metaData.name]; // Get value from metadataValues
-            return metaData.obligatory && (!value || value.trim() === ''); // Check if obligatory fields are empty
-          });
-        if(missingFields.length > 0){alert('Please fill the metadata')}
+        if (!file){ alert("Please select a file to upload");return;}
+        const obligatoryIds = selectedModele.ruleLine
+        .filter((metaData) => metaData.obligatory)
+        .map((metaData) => metaData.id);
+
+        if(!obligatoryIds.every((id) =>
+            metadataValues.some((item) => item.ruleLineId === id && item.value.trim() !== ""))){alert('Please fill the metadata');return}
         const formData = new FormData();
         formData.append("file", file);
         formData.append('folderId', folderId); // Add other fields
         formData.append('ruleId', selectedModele.id+'');
         formData.append('metadata', JSON.stringify(metadataValues));
-        await axiosClient.post("/api/upload", formData);
+        await axiosClient.post("/backReq/admin/document", formData,{headers:
+           { 'Content-Type': 'application/pdf'},
+           params:{type:'upload'}
+        })
+        .then(onClose())
+        .catch((error)=>console.log(error));
     
       };
       
@@ -107,7 +120,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
     return(
     <div id="wrapper" onClick={handleClose} className={`fixed inset-0 z-[97] mt-[2.5rem] ${sidebarOpen ? "ml-[12rem]":"ml-[4rem]"} bg-black bg-opacity-20 p-10`}>
         
-        <div className="bg-white w-full h-full justify-start px-6 py-4 sm:py-6 rounded-md lg:px-8 relative">
+        <div className="bg-white overflow-y-auto w-full h-full justify-start px-6 py-4 sm:py-6 rounded-md lg:px-8 relative">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" onClick={onClose} className="size-6 absolute right-1 top-1 cursor-pointer">
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
@@ -117,7 +130,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
         </div>
         <div  className=" h-[90%]">
         <div className=" grid grid-cols-10 h-[86%] gap-4 mt-4">
-            <div className="w-full border rounded-lg relative items-center flex col-span-7">
+            <div className="w-full bg-white border rounded-lg relative items-center flex col-span-7">
             {pdfSrc&&
             <svg onClick={()=>{setPdfSrc(null);setFile(null)}} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 p-1 absolute cursor-pointer top-0 rounded-full hover:bg-secondColor hover:text-white duration-300 right-2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -146,7 +159,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
             </label>}
 
             </div>
-            <div className="border-2 py-8 px-4 rounded-lg w-full col-span-3">
+            <div className="border-2 py-8 px-4 bg-white rounded-lg w-full col-span-3">
                 <span className="text-xl ">Selecte a modèles : </span>
                 <div>
                 {selectedModele?
@@ -198,14 +211,30 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
                     </div>}
                     {selectedModele&&
                     <div className="border rounded-md overflow-auto p-6 mt-4 ">
-                    {selectedModele.ruleLine.map((metaData,index)=><div key={index} className="mb-1">
-                    <label htmlFor="phone" className="mb-1 ml-1 block text-base font-medium text-gray-700">
-                        {metaData.name}
-                        {metaData.obligatory&&<span className="text-red-600">*</span>}
-                    </label>
-                    <input value={metadataValues[metaData.name]} onChange={(e) => handleInputChange(e, metaData.name)} required={metaData.obligatory} type={metaData.type} name={metadataValues[metaData.name]} id={metadataValues[metaData.name]} placeholder={`Enter ${metaData.name} metaData ...`}
-                        className="w-full rounded-md border border-[#e0e0e0] bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#9ea2db] focus:shadow-md" />
-                    </div>)}
+                    {selectedModele.ruleLine.map((metaData: any) => {
+                    const field = metadataValues.find((item) => item.ruleLineId === metaData.id) || { value: '' };
+                    return (
+                        <div key={metaData.id} className="mb-1">
+                        <label
+                            htmlFor={`field-${metaData.id}`}
+                            className="mb-1 ml-1 block text-base font-medium text-gray-700"
+                        >
+                            {metaData.name}
+                            {metaData.obligatory && <span className="text-red-600">*</span>}
+                        </label>
+                        <input
+                            value={field.value}
+                            onChange={(e) => handleInputChange(e, metaData.id)}
+                            required={metaData.obligatory}
+                            type={metaData.type}
+                            name={`field-${metaData.id}`}
+                            id={`field-${metaData.id}`}
+                            placeholder={`Enter ${metaData.name} metaData ...`}
+                            className="w-full rounded-md border border-[#e0e0e0] bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#9ea2db] focus:shadow-md"
+                        />
+                        </div>
+                    );
+                    })}
                     </div>}
                     
                 </div>

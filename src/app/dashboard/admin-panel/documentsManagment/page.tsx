@@ -3,6 +3,7 @@
 import axiosClient from "@/app/lib/axiosClient";
 import Files from "@/components/admin/FoldersComponents/Files";
 import Folder from "@/components/admin/FoldersComponents/Folder";
+import FolderInfo from "@/components/admin/FoldersComponents/FolderInfo";
 import DefualtLayout from "@/components/defualtLayout/DefualtLayout";
 import { useLayoutContext } from "@/components/myContext/myContext";
 import { useEffect, useState } from "react";
@@ -110,6 +111,7 @@ const documentsManagment=()=>{
         </div>
         {panel==='folders'&&<Folder createFolder={createFolder} setBreadcrumb={setBreadcrumb} breadcrumb={breadcrumb} goFile={()=>{setPanel('files')}} folders={folders} currentView={currentView} getFolder={getFolder}/>}
         {panel==='files'&& currentView && <Files folder={currentView}/>}
+        {panel ==='settings'&& <FolderInfo folder={currentView}/>}
         </div>
         </DefualtLayout>
     );
