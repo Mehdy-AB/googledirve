@@ -12,9 +12,17 @@ interface File {
   cancel: boolean;
 }
 
+interface Alert  {
+  type: 1 | 2 | 3 | 4;
+  message: string;
+  duration?: number;
+};
+
 interface LayoutContextProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
+  alerts:Alert[];
+  setAlerts: (alerts:Alert[]|((prv:Alert[])=>Alert[])) => void;
   uploadForm: boolean;
   setUploadForm: (open: boolean) => void;
   uploadFiles: File[];
@@ -24,8 +32,9 @@ interface LayoutContextProps {
 const LayoutContext = createContext<LayoutContextProps | undefined>(undefined);
 
 export const LayoutProvider = ({ children }: { children: ReactNode }) => {
-  const [sidebarOpen, setSidebarOpenState] = useState(false);
+  const [sidebarOpen, setSidebarOpenState] = useState(true);
   const [uploadForm, setUploadFormState] = useState(false);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
   const [uploadFiles, setUploadFilesState] = useState<File[]>([]);
 
   // Initialize state from cookies
@@ -58,7 +67,7 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <LayoutContext.Provider
-      value={{ sidebarOpen, setSidebarOpen, uploadForm, setUploadForm, uploadFiles, setUploadFiles }}
+      value={{ sidebarOpen, setAlerts, alerts, setSidebarOpen, uploadForm, setUploadForm, uploadFiles, setUploadFiles }}
     >
       {children}
     </LayoutContext.Provider>

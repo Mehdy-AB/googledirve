@@ -7,30 +7,38 @@ export async function GET(req: NextRequest) {
     const session = req.headers.get('authorization');
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type'); // e.g., 'all', 'folder', 'workspaces'
-    const folderId = searchParams.get('folderId'); // Required for type 'folder'
-  
+    const documentId = searchParams.get('documentId'); // Required for type 'folder'
+    const query = searchParams.get('content');
     if (!session) {
       return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
     }
-  
     let endpoint: string;
   
     switch (type) {
-      case 'all':
-        endpoint = `${process.env.Backend_URL}/folders`;
-        break;
-  
-      case 'folder':
-        if (!folderId) {
-          return NextResponse.json({ error: 'folderId is required for type folder' }, { status: 400 });
+      case 'document':
+        if (!documentId) {
+          return NextResponse.json({ error: 'documentId is required for type document' }, { status: 400 });
         }
-        endpoint = `${process.env.Backend_URL}/folders/${folderId}`;
+        endpoint = `${process.env.Backend_URL}/documents/${documentId}`;
         break;
-  
-      case 'workspaces':
-        endpoint = `${process.env.Backend_URL}/folders/workspaces`;
+      case 'metadata':
+          endpoint = `${process.env.Backend_URL}/documents/search/metadata`;
         break;
-  
+      case 'content':
+        if (!query) {
+          return NextResponse.json({ error: 'content is required for type content' }, { status: 400 });
+        }
+          endpoint = `${process.env.Backend_URL}/documents/search/content?query=${query}`;
+        break;
+      case 'favorites':
+          endpoint = `${process.env.Backend_URL}/documents/favorites`;
+        break;
+      case 'download':
+        if (!documentId) {
+          return NextResponse.json({ error: 'documentId is required for type download' }, { status: 400 });
+        }
+        endpoint = `${process.env.Backend_URL}/documents/`;
+        break;
       default:
         return NextResponse.json({ error: 'Invalid or missing type parameter' }, { status: 400 });
     }
@@ -45,7 +53,7 @@ export async function GET(req: NextRequest) {
     const res = await response.json();
 
     if (!response.ok) {
-      return NextResponse.json({ error: res.message || 'Failed to fetch data' }, { status: response.status });
+      return NextResponse.json({ error: res || 'Failed to fetch data' }, { status: response.status });
     }
 
     return NextResponse.json(res);
@@ -59,14 +67,9 @@ export async function POST(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type');
-    const formData = await req.formData();
-
-    // Extract fields from formData
-    const file = formData.get('file') as File; // Get the uploaded file
-    const folderId = formData.get('folderId');
-    const ruleId = formData.get('ruleId');
-    const metadata = formData.get('metadata');
+    const fileId = searchParams.get('fileId');
     const session = req.headers.get('authorization');
+    let formData ;
 
     if (!session) {
       return NextResponse.json(
@@ -76,19 +79,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (type === 'upload') {
-      if (!folderId || !ruleId || !metadata) {
-        return NextResponse.json(
-          { error: 'Missing required query parameters for upload' },
-          { status: 400 }
-        );
-      }
-
-      const formData = new FormData();
-      formData.append('file', file); // Add file
-      formData.append('folderId', folderId); // Add other fields
-      formData.append('ruleId', ruleId);
-      formData.append('metadata', metadata);
-
+      formData = await req.formData();
       const response = await fetch(
         `${process.env.Backend_URL}/documents/upload`,
         {
@@ -110,7 +101,32 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json(response);
     } else if (type === 'favorite') {
-      return NextResponse.json({ message: 'Favorite feature not implemented' });
+      if (!fileId) {
+        return NextResponse.json(
+          { error: 'Missing required query parameters' },
+          { status: 400 }
+        );
+      }
+
+      const response = await fetch(
+        `${process.env.Backend_URL}/documents/${fileId}/favorite`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: session, // Add only Authorization, don't manually set Content-Type
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        return NextResponse.json(
+          { error: errorResponse.message || 'Failed to upload' },
+          { status: response.status }
+        );
+      }
+
+      return NextResponse.json(response);
     } else {
       return NextResponse.json(
         { error: 'Invalid or missing type parameter' },
@@ -138,7 +154,8 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Authorization header is missing' }, { status: 401 });
     }
 
-    if (!type || !['rename', 'replace'].includes(type)) {
+    if (!type || !['rename', 'move'].includes(type)) {
+      console.log(type)
       return NextResponse.json({ error: 'Invalid or missing type parameter' }, { status: 400 });
     }
 
@@ -154,10 +171,10 @@ export async function PUT(req: NextRequest) {
 
     const res = await response.json();
 
-    if (res.error) {
+    if (res.message) {
       return NextResponse.json({ error: res.message }, { status: 400 });
     }
-
+    console.log(res)
     return NextResponse.json(res);
   } catch (error) {
     console.error('Error:', error);
@@ -169,9 +186,9 @@ function getEndpoint(type: string): string {
   const baseURL = process.env.Backend_URL || '';
   switch (type) {
     case 'rename':
-      return `${baseURL}/folders/rename`;
-    case 'replace':
-      return `${baseURL}/folders/move`;
+      return `${baseURL}/documents/rename`;
+    case 'move':
+      return `${baseURL}/documents/move`;
     default:
       throw new Error('Invalid type parameter');
   }

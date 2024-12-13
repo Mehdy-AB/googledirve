@@ -61,7 +61,6 @@ export async function POST(req: NextRequest) {
     const jsonBody = await req.json();
     // Extract data from JSON
     const data = JSON.stringify(jsonBody.data); // Ensure data is stringified
-    console.log(data)
   try {
     const session = req.headers.get('authorization');
     const response = await fetch(process.env.Backend_URL+`/folders/save`, {

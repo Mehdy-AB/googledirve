@@ -5,14 +5,14 @@ const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSid
 
     return (
       <div className={`fixed z-[100] ${sidebarOpen ? "w-[12rem]" : "w-[4rem]"} duration-300 ease-linear h-[100%] drop-shadow-md bg-foreground`}>
-        <button
+        {/* <button
           onClick={() => setSidebarOpen(!sidebarOpen)} // Wrap the call in an arrow function
           className={`absolute ${sidebarOpen ? "left-[12rem]" : "left-[4rem]"} duration-300 ease-linear bg-secondColor rounded-r-full p-1 top-[50%]`}
         >
          <svg width="10" height="16" viewBox="0 0 10 16" fill="none" className={` duration-300 ease-linear ${sidebarOpen ? "opacity-100" : " rotate-180"}`}  xmlns="http://www.w3.org/2000/svg">
             <path d="M8.9375 0.5L4.5625 8L8.9375 15.5M5.4375 0.5L1.0625 8L5.4375 15.5" stroke="white" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
-        </button>
+        </button> */}
 
         <div className="overflow-y-auto  overflow-x-hidden">
         <div className=" flex p-1">

@@ -2,6 +2,8 @@ import axiosClient from "@/app/lib/axiosClient";
 import FolderDisplay from "./FolderDisplay";
 import FolderDisplayTow from "./FolderDisplayTow";
 import { useState } from "react";
+import { useLayoutContext } from "@/components/myContext/myContext";
+import Loader from "@/app/lib/Loader";
 
 const Folder = ({
   currentView,
@@ -11,6 +13,9 @@ const Folder = ({
   breadcrumb,
   createFolder,
   setBreadcrumb,
+  setSearchContent,
+  goSearch,
+  loader,
 }: {
   currentView;
   folders;
@@ -19,15 +24,21 @@ const Folder = ({
   createFolder;
   breadcrumb: { folder: string; id: number }[];
   setBreadcrumb;
+  setSearchContent;
+  goSearch;
+  loader;
 }) => {
+    const {
+      setAlerts
+    } = useLayoutContext();
     const [edit,setEdit]=useState<string>(null);
   return (
     <div className="rounded shadow-xl ring-1 py-4 px-8 mx-2 my-6 bg-[#f3f3f7]  ring-gray-200">
       <div className="grid grid-cols-2 items-center">
         <div className="relative max-w-72">
-          <input
+          <input onChange={(e)=>setSearchContent(e.target.value)} onKeyUp={(e)=>{if(e.key==="Enter"){goSearch()}}}
             className="appearance-none border pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-[0.25rem] px-3 text-gray-800 leading-tight focus:outline-none focus:bg-gray-100  focus:shadow-outline text-sm "
-            id="username"
+            id="searchFileContent"
             type="text"
             placeholder="Search Files & Folders"
           />
@@ -48,7 +59,7 @@ const Folder = ({
             </svg>
           </div>
 
-          <div className="absolute left-0 inset-y-0 flex items-center">
+          <div onClick={goSearch} className="absolute left-0 inset-y-0 flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 ml-3 text-gray-400 hover:text-gray-500"
@@ -82,23 +93,6 @@ const Folder = ({
               />
             </svg>
             New Folder
-          </button>
-          <button className="flex items-center gap-1 py-1 px-4 border bg-gray-200 rounded-lg hover:opacity-80 font-[450]">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              className="size-5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m9 13.5 3 3m0 0 3-3m-3 3v-6m1.06-4.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
-              />
-            </svg>
-            Upload Folder
           </button>
         </div>
       </div>
@@ -172,7 +166,7 @@ const Folder = ({
         </div>
         <div className="flex justify-end">
           <span className="text-sm text-white bg-blue-500 px-2 rounded">
-            88 items
+            {folders.length} folders
           </span>
         </div>
       </div>
@@ -187,8 +181,9 @@ const Folder = ({
           <span>createdAt</span>
           <span>lastActive</span>
         </div>
-        <div className="max-h-[50rem] overflow-y-auto ">
-            {edit?.length>0&&<div className="p-2 items-center flex">
+        <div className="max-h-[50rem]  ">
+            {
+            edit?.length>0&&<div className="p-2 items-center flex">
             <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -209,8 +204,13 @@ const Folder = ({
                                 <path d="M16.75 20H15.25V13.75H8.75V20H7.25V13.5C7.25 13.1685 7.3817 12.8505 7.61612 12.6161C7.85054 12.3817 8.16848 12.25 8.5 12.25H15.5C15.8315 12.25 16.1495 12.3817 16.3839 12.6161C16.6183 12.8505 16.75 13.1685 16.75 13.5V20Z" fill="currentColor"/>
                                 <path d="M12.47 8.75H8.53001C8.3606 8.74869 8.19311 8.71403 8.0371 8.64799C7.88109 8.58195 7.73962 8.48582 7.62076 8.36511C7.5019 8.24439 7.40798 8.10144 7.34437 7.94443C7.28075 7.78741 7.24869 7.61941 7.25001 7.45V4H8.75001V7.25H12.25V4H13.75V7.45C13.7513 7.61941 13.7193 7.78741 13.6557 7.94443C13.592 8.10144 13.4981 8.24439 13.3793 8.36511C13.2604 8.48582 13.1189 8.58195 12.9629 8.64799C12.8069 8.71403 12.6394 8.74869 12.47 8.75Z" fill="currentColor"/>
                                 </svg>
+            <svg onClick={()=>{setEdit(null)}} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 cursor-pointer ml-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
             </div>}
-          {currentView ? (
+          {loader?
+          <div className="flex justify-center items-center my-10"><Loader/></div>
+          :currentView ? (
             currentView.subFolders.length > 0 ? (
               currentView.subFolders.map((folder) => (
                 <FolderDisplay
@@ -231,7 +231,7 @@ const Folder = ({
               </div>
             )
           ) : folders.length > 0 ? (
-            folders.map((folder) => (
+           folders.map((folder) => (
               <FolderDisplayTow
                 key={folder.id}
                 folder={folder}
