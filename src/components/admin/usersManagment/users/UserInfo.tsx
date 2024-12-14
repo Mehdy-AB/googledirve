@@ -1,14 +1,16 @@
 import axiosClient from "@/app/lib/axiosClient";
+import { useLayoutContext } from "@/components/myContext/myContext";
 import { useEffect, useState } from "react";
 
 const UserInfo=({userId,setUserInfo})=>{
     const [user,setUser]=useState(null)
+    const {setAlerts}=useLayoutContext();
     const getuser=()=>{
         axiosClient.get("/backReq/admin/users", {
             params: { type:'user' ,userId:userId},
           })
       .then((response) => setUser(response.data))
-      .catch(() => setUserInfo(null));
+      .catch(() => {setUserInfo(null);setAlerts((prv)=>[...prv,{type:2,message:'error getting user'}])});
     }
     useEffect(getuser,[]);
 return(

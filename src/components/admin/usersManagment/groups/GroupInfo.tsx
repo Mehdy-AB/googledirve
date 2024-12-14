@@ -2,6 +2,7 @@ import axiosClient from "@/app/lib/axiosClient";
 import { useEffect, useState } from "react";
 import UserInTable from "./UserInTable";
 import DisplayUsers from "../../forms/DisplayUsers";
+import { useLayoutContext } from "@/components/myContext/myContext";
 
 const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
     const [group,setgroup]=useState(null);
@@ -11,13 +12,14 @@ const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
     const [deleteConf,setDeleteConf]=useState(false)
     const [showUsers,setShowUsers]=useState(false)
     const [selected,setSelected]=useState<number[]>([])
+    const {setAlerts}=useLayoutContext();
 
     const getgroup=()=>{
         axiosClient.get("/backReq/admin/groups", {
             params: { type:'group' ,groupId:groupId},
           })
       .then((response) => {setgroup(response.data);setgroupEdit(response.data)})
-      .catch(() => setGroupInfo(null));
+      .catch(() => {setGroupInfo(null);setAlerts((prv)=>[...prv,{type:2,message:'error in getting group'}])});
     }
 
     const getGroupMembers=()=>{
@@ -25,7 +27,7 @@ const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
             params: {groupId:groupId},
           })
       .then((response) => {setUsers(response.data)})
-      .catch(() => setGroupInfo(null));
+      .catch(() => {setGroupInfo(null);setAlerts((prv)=>[...prv,{type:2,message:'error in getting group members'}])});
     }
 
     const createGroupMembers=(userId)=>{
@@ -40,8 +42,8 @@ const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
         },{
             params: {groupId:groupId,userId:userId},
           })
-      .then((response) => {getGroupMembers()})
-      .catch(() => setGroupInfo(groupId));
+      .then((response) => {getGroupMembers();setAlerts((prv)=>[...prv,{type:1,message:'done.'}])})
+      .catch(() => {setGroupInfo(groupId);setAlerts((prv)=>[...prv,{type:2,message:'error in add user'}])});
     }
 
     const deleteUser=()=>{
@@ -49,8 +51,8 @@ const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
         selected.map((id)=>{
             axiosClient.delete("/backReq/admin/groups/users",{
                 params: {groupId:groupId, userId:id }, // Add query parameters here
-              })
-          .catch((error) => console.error(error));
+              }).then(()=>setAlerts((prv)=>[...prv,{type:1,message:'done.'}]))
+          .catch((error) => {setAlerts((prv)=>[...prv,{type:2,message:'error in delete user from group.'}])});
         })
       getGroupMembers()
       setSelected([]);
@@ -64,7 +66,7 @@ const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
       .then(() => {getgroup();setEdit([])})
       .catch(() => setGroupInfo(null));
     }
-    useEffect(()=>{getgroup();getGroupMembers()},[]);
+    useEffect(()=>{getgroup();getGroupMembers();setAlerts((prv)=>[...prv,{type:2,message:'error in update group.'}])},[]);
     
 return(
     <>

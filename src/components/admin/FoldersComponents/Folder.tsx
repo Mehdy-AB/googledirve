@@ -28,9 +28,6 @@ const Folder = ({
   goSearch;
   loader;
 }) => {
-    const {
-      setAlerts
-    } = useLayoutContext();
     const [edit,setEdit]=useState<string>(null);
   return (
     <div className="rounded shadow-xl ring-1 py-4 px-8 mx-2 my-6 bg-[#f3f3f7]  ring-gray-200">

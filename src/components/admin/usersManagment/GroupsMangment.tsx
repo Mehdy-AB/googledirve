@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import TableGroups from "./groups/TableGroups";
 import GroupInfo from "./groups/GroupInfo";
 import CreateGroup from "../forms/CreateGroup";
+import { useLayoutContext } from "@/components/myContext/myContext";
 
 
 const GroupsMangment=()=>{
@@ -11,6 +12,7 @@ const GroupsMangment=()=>{
     const [editgroup, setEditGroup] = useState<any|null>(null);
     const [showCreate,setShowCreate] = useState(false);
     const [groupInfo,setGroupInfo] = useState<number | null>(null);
+    const {setAlerts}=useLayoutContext();
 
     const getGroups=()=>{
         if(searsh.length===0)
@@ -18,13 +20,13 @@ const GroupsMangment=()=>{
             params: { type:'all' }, // Add query parameters here
           })
       .then((response) => setGroups(response.data))
-      .catch((error) => console.error(error));
+      .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in getting groups'}]));
       else
       axiosClient.get("/backReq/admin/groups", {
         params: { type:'search',groupname:searsh }, // Add query parameters here
       })
     .then((response) => setGroups(response.data))
-    .catch((error) => console.error(error));
+    .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in getting groups'}]));
 
     }
     // const updategroup=(group:Partial<group>,id:number)=>{
@@ -43,8 +45,8 @@ const GroupsMangment=()=>{
         id.map((id)=>{
             axiosClient.delete("/backReq/admin/Groups",{
                 params: { groupId:id }, // Add query parameters here
-              })
-          .catch((error) => console.error(error));
+              }).then(()=>setAlerts((prv)=>[...prv,{type:1,message:'done.'}]))
+          .catch(() =>setAlerts((prv)=>[...prv,{type:2,message:'error in delete group'}]));
         })
       getGroups()
       setShowCreate(false);
@@ -55,7 +57,7 @@ const GroupsMangment=()=>{
 return(
     <>
     {showCreate &&<CreateGroup sidebarOpen={false} fetch={getGroups} onClose={()=>{setShowCreate(false),setEditGroup(null)}}/>}
-    <div className="h-full w-full py-10 px-60 ">
+    <div className="h-full w-full py-4 px-8 ">
         <div className="grid items-start grid-cols-2">
             <div className="grid">
                 <span className="text-xl font-semibold">group Manager - Groups</span>

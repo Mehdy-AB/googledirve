@@ -35,7 +35,7 @@ const documentsManagment=()=>{
                 setFolders(response.data);
                 setLoader(false);
             })
-            .catch((error) => console.error(error));
+            .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in getting workspaces'}]));
     };
 
  const getFolder = (folderId,name) => {
@@ -75,10 +75,9 @@ const documentsManagment=()=>{
           folder_parent_id: currentView?.id ||0,
         }})
         .then(()=>getFolder(currentView.id,currentView.name))
-        .catch((error) => console.error(error));      
+        .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in creating folder'}]));      
     }
 
-     useEffect(()=>{console.log(loader)},[loader])
     useEffect(()=>{
         getWorkspaces();
     },[]);

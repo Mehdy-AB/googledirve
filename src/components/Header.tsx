@@ -1,22 +1,28 @@
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 
-const Header=({sidebarOpen,setUploadForm}:{sidebarOpen:boolean,setUploadForm:any})=>{
+const Header=({sidebarOpen,setUploadForm,setAdminPanels,adminPanels}:{sidebarOpen:boolean,setUploadForm:any,setAdminPanels,adminPanels})=>{
     const [uploadSection,setUploadSection] = useState(false);
     const [notification,setNotification] = useState(false);
     const [info,setinfo] = useState(false);
-
+    const session = useSession();
     const [profile,setProfile] = useState(false);
         return(
             <>
             
             <div className={`z-[98] fixed top-0 ${sidebarOpen ? "left-[12rem] w-[calc(100%-12rem)] px-4" : "left-[4rem] w-[calc(100%-4rem)] px-4"} h-[2.5rem] drop-shadow-md bg-foreground`}>
                 <div className={`grid pl-[] justify-center items-center ${sidebarOpen ? "grid-cols-8" : "grid-cols-3"}  gap-4`}>
-                    {!sidebarOpen &&
+                    {/* {!sidebarOpen &&
                         <div className="text-white font-semibold text-2xl">
                             Alfresco
-                        </div>}
+                        </div>} */}
+                    
+                    <div><button onClick={()=>setAdminPanels(!adminPanels)} className="text-white hover:text-gray-200 hover:border-gray-200 py-1 px-6 ml-40 flex rounded-md border items-center">AdminPanel
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-2 size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                        </button></div>
                     <div className={`relative w-full mt-1 ${sidebarOpen ? " flex justify-center col-span-6" : ""}  max-w-lg`}>
                         <input type="text" className=" text-gray-800 pl-2 focus:outline-none focus:border border-secondColor rounded-sm p-1 pr-6 text-xs w-full" placeholder="Search MCQ | Topic | Course" />
 

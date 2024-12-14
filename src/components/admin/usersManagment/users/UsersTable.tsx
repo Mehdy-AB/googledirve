@@ -119,7 +119,7 @@ return(
 
                     <tbody className="whitespace-nowrap">
                         {users.length > 0 ? users.map((user, index) => <DisplayUserTable setUserInfo={setUserInfo} key={index} user={user} deleteUser={deleteUser} setEditUser={setEditUser} setShowCreate={setShowCreate}/>) :
-                            <tr className="py-10 text-center ">no users !!</tr>}
+                            <div aria-colspan={4} className="py-10 col-span-4 text-center ">no users !!</div>}
                     </tbody>
                 </table>
             </div>

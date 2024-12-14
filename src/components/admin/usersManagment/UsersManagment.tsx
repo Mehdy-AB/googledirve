@@ -4,6 +4,7 @@ import CreateUser from "../forms/CreateUser";
 import DisplayUserTable from "./users/DisplayUserTable";
 import UsersTable from "./users/UsersTable";
 import UserInfo from "./users/UserInfo";
+import { useLayoutContext } from "@/components/myContext/myContext";
 export interface User {
     fullName: string,
     email: string,
@@ -19,28 +20,28 @@ const UsersManagment=()=>{
     const [editUser, setEditUser] = useState<any|null>(null);
     const [showCreate,setShowCreate] = useState(false);
     const [userInfo,setUserInfo] = useState<number | null>(null);
-
+    const {setAlerts}=useLayoutContext();
     const getusers=()=>{
         if(searsh.length===0)
         axiosClient.get("/backReq/admin/users", {
             params: { type:'all' }, // Add query parameters here
           })
       .then((response) => setUsers(response.data))
-      .catch((error) => console.error(error));
+      .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in getting users'}]));
       else
       axiosClient.get("/backReq/admin/users", {
         params: { type:'search',username:searsh }, // Add query parameters here
       })
     .then((response) => setUsers(response.data))
-    .catch((error) => console.error(error));
+    .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in getting users'}]));
 
     }
     const updateUser=(user:Partial<User>,id:number)=>{
         axiosClient.put("/backReq/admin/users",{data:user}, {
             params: { userId:id }, // Add query parameters here
           })
-      .then(() => getusers())
-      .catch((error) => console.error(error));
+      .then(() => {getusers();setAlerts((prv)=>[...prv,{type:1,message:'done.'}])})
+      .catch(() => {setAlerts((prv)=>[...prv,{type:2,message:'error in update user'}]);getusers();});
       getusers()
       setShowCreate(false);
       setEditUser(null);
@@ -51,8 +52,8 @@ const UsersManagment=()=>{
         id.map((id)=>{
             axiosClient.delete("/backReq/admin/users",{
                 params: { userId:id }, // Add query parameters here
-              })
-          .catch((error) => console.error(error));
+              }).then(()=>setAlerts((prv)=>[...prv,{type:1,message:'done.'}]))
+          .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in delete user'}]));
         })
       getusers()
       setShowCreate(false);
@@ -65,7 +66,7 @@ const UsersManagment=()=>{
 return(
     <>
     {showCreate &&<CreateUser sidebarOpen={false} fetch={getusers} update={updateUser} EditUser={editUser} onClose={()=>{setShowCreate(false),setEditUser(null)}}/>}
-    <div className="h-full w-full py-10 px-60 ">
+    <div className="h-full w-full py-4 px-8 ">
         <div className="grid items-start grid-cols-2">
             <div className="grid">
                 <span className="text-xl font-semibold">User Manager - Users</span>
