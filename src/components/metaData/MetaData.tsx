@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CreateMetaDataForm from "../CreateMetaDataForm";
 import axiosClient from "@/app/lib/axiosClient";
 import * as XLSX from "xlsx";
+import { useLayoutContext } from "../myContext/myContext";
 export interface Rule {
     name: string;
     type: "Text" | "Boolean" | "Number" | "Date";
@@ -18,6 +19,7 @@ export interface data {
 
 const MetaData=({sidebarOpen})=>{
     const [metaData,setMetaData] = useState<data[]>([]);
+    const {setAlerts}=useLayoutContext();
 
     const getMetaData = () => {
       axiosClient
@@ -25,7 +27,7 @@ const MetaData=({sidebarOpen})=>{
           .then((response) => {
             setMetaData(response.data); // Display subfolders and files of the clicked folder
           })
-          .catch((error) => console.error(error));
+          .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in getting modeles'}]));
       };
 
 
@@ -45,8 +47,9 @@ const MetaData=({sidebarOpen})=>{
           .post("/backReq/admin/metadata", {data:ruleLine})
           .then((response) => {
             setMetaData(response.data); // Display subfolders and files of the clicked folder
+            setAlerts((prv)=>[...prv,{type:1,message:'done.'}])
           })
-          .catch((error) => console.error(error));
+          .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in create modeles'}]));
 
     }
     
