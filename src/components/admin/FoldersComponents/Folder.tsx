@@ -1,7 +1,7 @@
 import axiosClient from "@/app/lib/axiosClient";
 import FolderDisplay from "./FolderDisplay";
 import FolderDisplayTow from "./FolderDisplayTow";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLayoutContext } from "@/components/myContext/myContext";
 import Loader from "@/app/lib/Loader";
 

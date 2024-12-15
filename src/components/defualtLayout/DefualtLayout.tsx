@@ -39,7 +39,7 @@ const DefualtLayout=({
           {children}
         </div>
         <div className={`z-[97] duration-300 ease-in ${uploadForm ? "opacity-100 " : "opacity-50"}`}>
-          {uploadForm && <UploadForm sidebarOpen={sidebarOpen} onClose={() => setUploadForm(false)} folderId={0} />}
+          {/* {uploadForm && <UploadForm sidebarOpen={sidebarOpen} onClose={() => setUploadForm(false)} folderId={0} />} */}
         </div>
         <div className={`${adminPanels?'opacity-100':'opacity-0'} duration-200 transition-opacity`}>{adminPanels&&
         <DropDown setIsShow={setAdminPanels}><AdminPanels onClose={()=>setAdminPanels(false)} sidebarOpen={sidebarOpen}/></DropDown>}</div>

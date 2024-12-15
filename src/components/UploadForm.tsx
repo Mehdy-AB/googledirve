@@ -1,12 +1,14 @@
 import axiosClient from "@/app/lib/axiosClient";
 import { error } from "console";
 import { useEffect, useRef, useState } from "react";
+import { useLayoutContext } from "./myContext/myContext";
 
 
-const  UploadForm=({onClose,sidebarOpen,folderId})=>{
+const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder})=>{
     
     const [modeles,setModeles] = useState([]);
     const [filteredData, setFilteredData] = useState([]); 
+    const {setAlerts}=useLayoutContext();
     const [file, setFile] = useState<File>(); // To hold the filtered results
     const getMedeles = () => {
         axiosClient
@@ -15,7 +17,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
               setModeles(response.data); // Display subfolders and files of the clicked folder
               setFilteredData(response.data);
             })
-            .catch((error) => console.error(error));
+            .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:"error in getting modeles"}]));
     };
     useEffect(()=>{
         getMedeles();
@@ -109,8 +111,8 @@ const  UploadForm=({onClose,sidebarOpen,folderId})=>{
            { 'Content-Type': 'application/pdf'},
            params:{type:'upload'}
         })
-        .then(onClose())
-        .catch((error)=>console.log(error));
+        .then(()=>{onClose();regetFolder();setAlerts((prv)=>[...prv,{type:1,message:"done."}])})
+        .catch((error)=>setAlerts((prv)=>[...prv,{type:2,message:"error in upload file"}]));
     
       };
       

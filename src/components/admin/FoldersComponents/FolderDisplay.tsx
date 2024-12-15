@@ -1,16 +1,18 @@
 import axiosClient from "@/app/lib/axiosClient";
+import { formatBitSize } from "@/app/lib/valuesConvert";
+import { useLayoutContext } from "@/components/myContext/myContext";
 import { useEffect, useState } from "react";
 
 const FolderDisplay=({id,getFolder})=>{
     const [folder,setFolder]=useState<any>();
-
+    const {setAlerts}=useLayoutContext();
     const getFolderContent = () => {
         axiosClient
             .get("/backReq/admin/folders", { params: { type: "folder", folderId:id } })
             .then((response) => {
                 setFolder(response.data); // Display subfolders and files of the clicked folder
             })
-            .catch((error) => console.error(error));
+            .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in getting folder'}]));
         };
     useEffect(getFolderContent,[]);
     
@@ -38,7 +40,7 @@ return(
                         {folder?.name}
                     </span>
                 </div>
-                <span>{folder?.documents.reduce((acc, doc) => acc + doc.size, 0)} MB</span>
+                <span>{formatBitSize(folder?.documents.reduce((acc, doc) => acc + doc.size, 0))}</span>
                 <span>{folder?.documents.length}</span>
                 <span>{folder?.subFolders?.length}</span>
                 <span>{new Date(folder?.createdAt).toLocaleString()}</span>

@@ -1,4 +1,5 @@
 import axiosClient from "@/app/lib/axiosClient";
+import { formatBitSize } from "@/app/lib/valuesConvert";
 import DropDown from "@/components/DropDown";
 import { useLayoutContext } from "@/components/myContext/myContext";
 import { useEffect, useState } from "react";
@@ -84,7 +85,7 @@ return(
                         
                     </span>
                 </div>
-                <span>{file?.size} MB</span>
+                <span>{formatBitSize(file.size)}</span>
                 <span>{file?.rule.name}</span>
                 <div className="flex cursor-pointer w-max">
                                         <div>

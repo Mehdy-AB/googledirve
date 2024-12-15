@@ -1,3 +1,4 @@
+import { formatBitSize } from "@/app/lib/valuesConvert";
 import DropDown from "@/components/DropDown";
 import { useState } from "react";
 
@@ -27,7 +28,7 @@ return(
                         {folder.name}
                     </span>
                 </div>
-                <span>{folder.documents.reduce((acc, doc) => acc + doc.size, 0)} MB</span>
+                <span>{formatBitSize(folder?.documents.reduce((acc, doc) => acc + doc.size, 0))}</span>
                 <span>{folder.documents.length}</span>
                 <span>{folder.subFolders?.length}</span>
                 <span>{new Date(folder.createdAt).toLocaleString()}</span>

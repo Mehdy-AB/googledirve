@@ -31,7 +31,7 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,
   return (
     <>
     {showUpoaldModele&&
-      <UploadForm folderId={folder.id} onClose={()=>setShowUpoaldModele(false)} sidebarOpen={true}/>}
+      <UploadForm regetFolder={regetFolder} folderId={folder.id} onClose={()=>setShowUpoaldModele(false)} sidebarOpen={true}/>}
     <div className="rounded shadow-xl ring-1 py-4 px-8 mx-2 my-6 bg-[#f3f3f7]  ring-gray-200">   
       <div className="grid grid-cols-2 items-center">
         <div className="relative max-w-72">
