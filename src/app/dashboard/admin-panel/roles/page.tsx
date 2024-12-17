@@ -22,7 +22,8 @@ export interface data {
     description?:string | null | undefined;
   }
 
-const Page=({sidebarOpen})=>{
+const Page=()=>{
+  const sidebarOpen =true;
     const [Roles,setRoles] = useState<data[]>([]);
     const {setAlerts}=useLayoutContext();
 

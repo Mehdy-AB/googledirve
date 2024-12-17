@@ -50,7 +50,7 @@ const CreateUser=({onClose,sidebarOpen,fetch,EditUser,update})=>{
         <div className="mx-auto relative w-full max-w-[550px] bg-white rounded-lg px-20 ring-1 ring-slate-300 py-16 shadow-lg">
         <div onSubmit={createUser}>
           <div className=" text-center text-3xl font-semibold ">Créer un utilisateur</div>
-          <div className=" text-center text-sm my-2 mb-3 font-semibold text-gray-500 ">Créez un nouvel utilisateur pour l'ajouter aux groupes et donner des autorisations</div>
+          <div className=" text-center text-sm my-2 mb-3 font-semibold text-gray-500 ">Créez un nouvel utilisateur pour lajouter aux groupes et donner des autorisations</div>
           <div className="border rounded-full mb-6"></div>
             <div className="-mx-3 flex flex-wrap">
                 <div className="w-full px-3 sm:w-1/2">
