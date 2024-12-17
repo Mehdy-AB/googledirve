@@ -35,7 +35,54 @@ const UsersManagment=()=>{
     .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in getting users'}]));
 
     }
+     const validateUser = (user) => {
+        // Check if the user object exists
+        if (!user) return;
+      
+        // Validation rules
+        const validations = [
+          { key: "fullName", message: "Full Name should not be empty and must be at least 3 characters long" },
+          { key: "email", message: "Email is invalid or empty" },
+          { key: "jobTitle", message: "Job Title should not be empty and must be at least 3 characters long" },
+          { key: "username", message: "Username should not be empty and must be at least 3 characters long" },
+          { key: "password", message: "Password should not be empty and must be at least 3 characters long" },
+        ];
+      
+        // Iterate over each validation rule
+        for (let validation of validations) {
+          const value = user[validation.key];
+      
+          // Check for empty field
+          if (!value || value.trim() === "") {
+            setAlerts((prev) => [
+              ...prev,
+              { type: 3, message: `${validation.key} should not be empty` },
+            ]);
+            return false; // Stop further validation
+          }
+      
+          // Check for specific rules
+          if (validation.key === "email" && !isValidEmail(value)) {
+            setAlerts((prev) => [
+              ...prev,
+              { type: 3, message: "Invalid email format" },
+            ]);
+            return false; // Stop further validation
+          }
+      
+          if (value.length < 3) {
+            setAlerts((prev) => [
+              ...prev,
+              { type: 3, message: `${validation.key} must be at least 3 characters long` },
+            ]);
+            return false; // Stop further validation
+          }
+        }
+      
+        return true; // All validations passed
+    };      
     const updateUser=(user:Partial<User>,id:number)=>{
+        if(!validateUser(user))return;
         axiosClient.put("/backReq/admin/users",{data:user}, {
             params: { userId:id }, // Add query parameters here
           })

@@ -1,4 +1,5 @@
 import axiosClient from "@/app/lib/axiosClient";
+import { useLayoutContext } from "@/components/myContext/myContext";
 import { useState } from "react";
 
 const CreateUser=({onClose,sidebarOpen,fetch})=>{
@@ -8,8 +9,37 @@ const CreateUser=({onClose,sidebarOpen,fetch})=>{
               description: '',
             }
       );
+    const {setAlerts}=useLayoutContext();
 
     const createUser=()=>{
+      if(user.name.trim() === ""){
+        setAlerts((prev) => [
+          ...prev,
+          { type: 3, message: `name should not be empty` },
+        ]);
+        return;
+      }
+      if(user.name.length < 3){
+        setAlerts((prev) => [
+          ...prev,
+          { type: 3, message: `name should not be less then 3` },
+        ]);
+        return;
+      }
+      if(user.description.trim() === ""){
+        setAlerts((prev) => [
+          ...prev,
+          { type: 3, message: `description should not be empty` },
+        ]);
+        return;
+      }
+      if(user.description.length <3){
+        setAlerts((prev) => [
+          ...prev,
+          { type: 3, message: `description should not be less then 3` },
+        ]);
+        return;
+      }
         axiosClient.post("/backReq/admin/groups", {data:user})
         .then(() => fetch())
         .catch((error) => console.error(error));
