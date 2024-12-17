@@ -54,7 +54,7 @@ const CreateUser=({onClose,sidebarOpen,fetch})=>{
 
             <div className="flex justify-center">
                 <button onClick={createUser}
-                    className="hover:shadow-form  rounded-md bg-secondColor py-3 px-32 text-center text-base font-semibold text-white outline-none">
+                    className="hover:shadow-form rounded-md bg-secondColor py-3 px-32 text-center text-base font-semibold text-white outline-none">
                     Créer
                 </button>
             </div>
