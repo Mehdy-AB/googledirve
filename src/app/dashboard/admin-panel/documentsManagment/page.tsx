@@ -15,14 +15,31 @@ const documentsManagment=()=>{
       } = useLayoutContext();
     const [folders, setFolders] = useState([]);
     const [fileOpen, setFileOpen] = useState(null);
-    const [filesOpen, setFilesOpen] = useState<{id:number,name:string}[]>([]);
+    const [filesOpen, setFilesOpen] = useState<{id:number,name:string,data?}[]>([]);
+    
+    const getFile =async (fileId) => {
+        await axiosClient
+            .get("/backReq/admin/document", { params: { type: "download",documentId:fileId },responseType: "blob",})
+            .then((response) => {
+              const blob = new Blob([response.data], { type: 'application/pdf' });
+              const url = URL.createObjectURL(blob);
+              setFilesOpen((prev) =>
+                prev.map((file) =>
+                  file.id === fileId ? { ...file, data: url } : file
+                )
+              );
+              
+            })
+            .catch(() => setAlerts((prv)=>[...prv,{type:2,message:"error in getting modeles"}]));
+    };
 
-    const addFileToOpen = (file: { id: number; name: string }) => {
+    const addFileToOpen = async (file: { id: number; name: string }) => {
         setFilesOpen((prevFilesOpen) => {
           // Check if the file with the same id already exists
           const exists = prevFilesOpen.some((f) => f.id === file.id);
       
           if (exists) {
+            
             setFileOpen(file.id);
             setPanel('openFile')
             return prevFilesOpen; // No changes needed
@@ -38,6 +55,7 @@ const documentsManagment=()=>{
           setPanel('openFile')
           return updatedFiles;
         });
+        await getFile(file.id);
     };
       
     const [searchContent, setSearchContent] = useState(null);
@@ -73,7 +91,7 @@ const documentsManagment=()=>{
             setCurrentView(response.data); // Display subfolders and files of the clicked folder
             setLoader(false);
         })
-        .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in getting folders'}]));
+        .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in getting folders'}]));
         
     };
 
@@ -85,7 +103,7 @@ const documentsManagment=()=>{
                 setCurrentView(response.data); // Display subfolders and files of the clicked folder
                 setLoader(false);
             })
-            .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:'error in getting folders'}]));
+            .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in getting folders'}]));
             
     };
     const createFolder=(name:string)=>{
@@ -151,7 +169,7 @@ const documentsManagment=()=>{
         {panel==='folders'&&<Folder loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} createFolder={createFolder} setBreadcrumb={setBreadcrumb} breadcrumb={breadcrumb} goFile={()=>{setPanel('files')}} folders={folders} currentView={currentView} getFolder={getFolder}/>}
         {panel==='files'&& currentView && <Files setFilesOpen={addFileToOpen} regetFolder={regetFolder} loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} folder={currentView}/>}
         {panel==='search' && <FilesSearch setFilesOpen={addFileToOpen} defaultContent={searchContent}  />}
-        {panel==='openFile'&& fileOpen && <OpenPdf fileId={fileOpen} />}
+        {panel==='openFile'&& fileOpen && <OpenPdf file={filesOpen.find((file)=>file.id===fileOpen)} />}
         </div>
     );
 }

@@ -59,7 +59,6 @@ export async function GET(req: NextRequest) {
         return new NextResponse(fileBuffer, {
           headers: {
             'Content-Type': contentType,
-            'Content-Disposition': contentDisposition,
           },
         });
         break;

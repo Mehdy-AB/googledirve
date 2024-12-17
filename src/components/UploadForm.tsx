@@ -173,7 +173,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
                 :<div className="relative">
                     <input
                         className="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-gray-600 focus:border-gray-600 focus:shadow-outline"
-                        id="modèles-search"
+                        id="modeles-search"
                         type="text"
                         onFocus={()=>setShowModeleDrop(true)}
                         value={query}
@@ -205,7 +205,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
                         </svg>
                     </div>
-                    {showModeleDrop&&<DropDown setIsShow={setShowModeleDrop}><div id="modeleDropDown" className=" overflow-y-auto max-h-48 absolute bg-white py-2 border mt-1 w-full rounded-md shadow-md ring-1 ring-gray-300">
+                    {showModeleDrop&&<DropDown notEff={['modeles-search']} setIsShow={setShowModeleDrop}><div id="modeleDropDown" className=" overflow-y-auto max-h-48 absolute bg-white py-2 border mt-1 w-full rounded-md shadow-md ring-1 ring-gray-300">
                         {filteredData.length >0?filteredData.map((item)=><button name="modelesbuttons" onClick={()=>setSelectedModele(item)} type="button" key={item.id} className="px-4 text-start my-1 py-1 hover:bg-gray-200 w-full">{item.name}</button>):
                         <span className="text-center w-full text-sm">Non modeles !</span>}
                     </div></DropDown>}

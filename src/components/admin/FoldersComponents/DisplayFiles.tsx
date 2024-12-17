@@ -2,7 +2,7 @@ import axiosClient from "@/app/lib/axiosClient";
 import { formatBitSize } from "@/app/lib/valuesConvert";
 import DropDown from "@/components/DropDown";
 import { useLayoutContext } from "@/components/myContext/myContext";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 
 const DisplayFiles=({file,folders,setFilesOpen})=>{

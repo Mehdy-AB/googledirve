@@ -8,12 +8,11 @@ import { useLayoutContext } from "@/components/myContext/myContext";
 import Loader from "@/app/lib/Loader";
 import DropDown from "@/components/DropDown";
 
-const Files = ({fileId}) => {
+const Files = ({file}) => {
     const{setAlerts}=useLayoutContext();
     const [modeles,setModeles] = useState([]);
     const [filteredData, setFilteredData] = useState([]); 
-    const [pdfSrc, setPdfSrc] = useState<string | null>(null);
-    const [file, setFile] = useState<File>(); // To hold the filtered results
+    // const [pdfSrc, setPdfSrc] = useState<string | null>(null);
     const getMedeles = () => {
         axiosClient
             .get("/backReq/admin/metadata", { params: { type: "all" } })
@@ -21,19 +20,10 @@ const Files = ({fileId}) => {
               setModeles(response.data); // Display subfolders and files of the clicked folder
               setFilteredData(response.data);
             })
-            .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:"error in getting file"}]));
+            .catch(() => setAlerts((prv)=>[...prv,{type:2,message:"error in getting file"}]));
     };
-    const getFile = () => {
-      axiosClient
-          .get("/backReq/admin/document", { params: { type: "download",documentId:fileId },responseType: "blob",})
-          .then((response) => {
-            const blob = new Blob([response.data], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
-            setPdfSrc(url);
-          })
-          .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:"error in getting modeles"}]));
-  };
-  useEffect(() => {getFile();getMedeles();},[]);
+
+  useEffect(() => {getMedeles();},[]);
     const [query, setQuery] = useState(""); // To hold the search query
     const [showModeleDrop, setShowModeleDrop] = useState(false);
     const [selectedModele, setSelectedModele] = useState<{"id": number,
@@ -75,15 +65,15 @@ const Files = ({fileId}) => {
   return (
     <div className="rounded shadow-xl ring-1 py-4 px-8 mx-2 my-6 bg-[#f3f3f7]  ring-gray-200">   
       <div className="text-start flex flex-col">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight ">Upload </h1>
-            <p className="mt-3 text-lg ">Please select a PDF file to upload. Once uploaded, the file will be displayed below for preview.</p>
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight ">file-N0.pdf </h1>
+            <p className="mt-3 text-lg ">option 1 | 50 Users | 5 Admin | 758 items</p>
         </div>
         <div  className=" h-[90%]">
         <div className=" grid grid-cols-10 h-[86%] gap-4 mt-4">
             <div className="w-full bg-white border rounded-lg relative justify-center items-center flex col-span-7">
-            {pdfSrc ?
+            {file?.data ?
             <iframe
-                src={pdfSrc}
+                src={file.data}
                 width="100%"
                 height="600px"
                 style={{ border: 'none' }}
@@ -102,7 +92,7 @@ const Files = ({fileId}) => {
                 :<div className="relative">
                     <input
                         className="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-gray-600 focus:border-gray-600 focus:shadow-outline"
-                        id="modèles-search"
+                        id="modeles-search"
                         type="text"
                         onFocus={()=>setShowModeleDrop(true)}
                         value={query}
@@ -134,7 +124,7 @@ const Files = ({fileId}) => {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
                         </svg>
                     </div>
-                    {showModeleDrop&&<DropDown setIsShow={setShowModeleDrop}><div id="modeleDropDown" className=" overflow-y-auto max-h-48 absolute bg-white py-2 border mt-1 w-full rounded-md shadow-md ring-1 ring-gray-300">
+                    {showModeleDrop&&<DropDown notEff={['modeles-search']} setIsShow={setShowModeleDrop}><div id="modeleDropDown" className=" overflow-y-auto max-h-48 absolute bg-white py-2 border mt-1 w-full rounded-md shadow-md ring-1 ring-gray-300">
                         {filteredData.length >0?filteredData.map((item)=><button name="modelesbuttons" onClick={()=>setSelectedModele(item)} type="button" key={item.id} className="px-4 text-start my-1 py-1 hover:bg-gray-200 w-full">{item.name}</button>):
                         <span className="text-center w-full text-sm">Non modeles !</span>}
 

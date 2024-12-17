@@ -39,11 +39,10 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,setFilesOpen,
     getRootProps,
     getInputProps,
     isDragActive,
-    acceptedFiles,
   } = useDropzone({
     onDrop,
+    noClick: true,
     accept: {
-      "image/*": [], // Accept images, can be customized
       "application/pdf": [], // Accept PDFs
     },
 
@@ -128,7 +127,7 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,setFilesOpen,
           <span>lastActive</span>
         </div>
         <div {...getRootProps()} className=" ">
-        <input {...getInputProps()} className="hidden"/>
+        <input {...getInputProps()} accept="application/pdf" className="hidden"/>
         {isDragActive ? (
         <div className="py-20 bg-white w-full h-full px-2">
           <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">

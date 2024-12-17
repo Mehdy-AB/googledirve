@@ -1,9 +1,6 @@
 import axiosClient from "@/app/lib/axiosClient";
-import FolderDisplay from "./FolderDisplay";
-import FolderDisplayTow from "./FolderDisplayTow";
 import { useEffect, useState } from "react";
 import DisplayFiles from "./DisplayFiles";
-import UploadForm from "@/components/UploadForm";
 import { useLayoutContext } from "@/components/myContext/myContext";
 
 const FilesSearch = ({defaultContent,setFilesOpen}) => {
