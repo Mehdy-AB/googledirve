@@ -9,17 +9,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#E8F3F1",
-        foreground: "#66818C",
-        secondColor:"#667d92"
-      },
-      fontFamily: {
-        poppins: ['Poppins', 'sans-serif'], // Register the custom font
-      },
-      fontSize: {
-        'tiny': '0.625rem', 
-        '8px': '8px',     
-        '12px': '12px', 
+        background: "var(--background)",
+        foreground: "var(--foreground)",
       },
     },
   },

@@ -1,7 +1,6 @@
 import axiosClient from "@/app/lib/axiosClient";
 import { useState, useEffect } from "react";
 import CreateUser from "../forms/CreateUser";
-import DisplayUserTable from "./users/DisplayUserTable";
 import UsersTable from "./users/UsersTable";
 import UserInfo from "./users/UserInfo";
 import { useLayoutContext } from "@/components/myContext/myContext";
