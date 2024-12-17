@@ -1,16 +1,19 @@
 import axiosClient from "@/app/lib/axiosClient";
-import { error } from "console";
+import FolderDisplay from "./FolderDisplay";
+import FolderDisplayTow from "./FolderDisplayTow";
 import { useEffect, useRef, useState } from "react";
-import { useLayoutContext } from "./myContext/myContext";
-import DropDown from "./DropDown";
+import DisplayFiles from "./DisplayFiles";
+import UploadForm from "@/components/UploadForm";
+import { useLayoutContext } from "@/components/myContext/myContext";
+import Loader from "@/app/lib/Loader";
+import DropDown from "@/components/DropDown";
 
-
-const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
-    
+const Files = ({fileId}) => {
+    const{setAlerts}=useLayoutContext();
     const [modeles,setModeles] = useState([]);
     const [filteredData, setFilteredData] = useState([]); 
-    const {setAlerts}=useLayoutContext();
-    const [file, setFile] = useState<File>(defualtfile); // To hold the filtered results
+    const [pdfSrc, setPdfSrc] = useState<string | null>(null);
+    const [file, setFile] = useState<File>(); // To hold the filtered results
     const getMedeles = () => {
         axiosClient
             .get("/backReq/admin/metadata", { params: { type: "all" } })
@@ -18,12 +21,19 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
               setModeles(response.data); // Display subfolders and files of the clicked folder
               setFilteredData(response.data);
             })
-            .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:"error in getting modeles"}]));
+            .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:"error in getting file"}]));
     };
-    useEffect(()=>{
-        getMedeles();
-    },[]);
-
+    const getFile = () => {
+      axiosClient
+          .get("/backReq/admin/document", { params: { type: "download",documentId:fileId },responseType: "blob",})
+          .then((response) => {
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            setPdfSrc(url);
+          })
+          .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:"error in getting modeles"}]));
+  };
+  useEffect(() => {getFile();getMedeles();},[]);
     const [query, setQuery] = useState(""); // To hold the search query
     const [showModeleDrop, setShowModeleDrop] = useState(false);
     const [selectedModele, setSelectedModele] = useState<{"id": number,
@@ -45,6 +55,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
           }))
         );
       }, [selectedModele]);
+
     useEffect(()=>{
         setFilteredData(
             modeles.filter((item) => item.name.toLowerCase().includes(query))
@@ -58,107 +69,25 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
             item.ruleLineId === ruleLineId ? { ...item, value } : item
           )
         );
-      };      
+      };     
 
-    const [pdfSrc, setPdfSrc] = useState<string | null>(null);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file && file.type === 'application/pdf') {
-        setFile(file);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            setPdfSrc(e.target.result as string);
-          }
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert('Please upload a valid PDF file.');
-      }
-    };
-
-    if(defualtfile){
-      useEffect(()=>{
-        if (file && file.type === 'application/pdf') {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            if (e.target?.result) {
-              setPdfSrc(e.target.result as string);
-            }
-          };
-          reader.readAsDataURL(file);
-        } else {
-          alert('Please upload a valid PDF file.');
-        }
-      },[])
-    }
-
-      const handleUpload = async () => {
-        if (!file){ alert("Please select a file to upload");return;}
-        const obligatoryIds = selectedModele.ruleLine
-        .filter((metaData) => metaData.obligatory)
-        .map((metaData) => metaData.id);
-
-        if(!obligatoryIds.every((id) =>
-            metadataValues.some((item) => item.ruleLineId === id && item.value.trim() !== ""))){alert('Please fill the metadata');return}
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append('folderId', folderId); // Add other fields
-        formData.append('ruleId', selectedModele.id+'');
-        formData.append('metadata', JSON.stringify(metadataValues));
-        await axiosClient.post("/backReq/admin/document", formData,{headers:
-           { 'Content-Type': 'application/pdf'},
-           params:{type:'upload'}
-        })
-        .then(()=>{onClose();regetFolder();setAlerts((prv)=>[...prv,{type:1,message:"done."}])})
-        .catch((error)=>setAlerts((prv)=>[...prv,{type:2,message:"error in upload file"}]));
-    
-      };
-      
-    const handleClose = (e) => {
-        if (e.target.id === 'wrapper') onClose();
-      };
-    return(
-    <div id="wrapper" onClick={handleClose} className={`fixed inset-0 z-[97] mt-[2.5rem] ${sidebarOpen ? "ml-[12rem]":"ml-[4rem]"} bg-black bg-opacity-20 p-10`}>
-        
-        <div className="bg-white overflow-y-auto w-full h-full justify-start px-6 py-4 sm:py-6 rounded-md lg:px-8 relative">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" onClick={onClose} className="size-6 absolute right-1 top-1 cursor-pointer">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
-        <div className="text-start flex flex-col">
+  return (
+    <div className="rounded shadow-xl ring-1 py-4 px-8 mx-2 my-6 bg-[#f3f3f7]  ring-gray-200">   
+      <div className="text-start flex flex-col">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight ">Upload </h1>
             <p className="mt-3 text-lg ">Please select a PDF file to upload. Once uploaded, the file will be displayed below for preview.</p>
         </div>
         <div  className=" h-[90%]">
         <div className=" grid grid-cols-10 h-[86%] gap-4 mt-4">
-            <div className="w-full bg-white border rounded-lg relative items-center flex col-span-7">
-            {pdfSrc&&
-            <svg onClick={()=>{setPdfSrc(null);setFile(null)}} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 p-1 absolute cursor-pointer top-0 rounded-full hover:bg-secondColor hover:text-white duration-300 right-2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
-            }
+            <div className="w-full bg-white border rounded-lg relative justify-center items-center flex col-span-7">
             {pdfSrc ?
             <iframe
                 src={pdfSrc}
                 width="100%"
                 height="600px"
                 style={{ border: 'none' }}
-            ></iframe>
-            :<label htmlFor="uploadFile1"
-                className="bg-white text-gray-500 font-semibold text-base rounded px-36 h-64 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-11 mb-2 fill-gray-500" viewBox="0 0 32 32">
-                    <path
-                    d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z"
-                    data-original="#000000" />
-                    <path
-                    d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z"
-                    data-original="#000000" />
-                </svg>
-                <input onChange={handleFileChange} type="file" accept="application/pdf" id='uploadFile1' className="hidden" />
-                <h4 className="">Drag & Drop or <label htmlFor="uploadFile1" className="text-blue-600 hover:underline cursor-pointer">Choose file</label> to upload</h4>
-                <p className="text-sm font-medium text-gray-500 mt-2"> only pdf is Allowed.</p>
-            </label>}
+            ></iframe>:<Loader/>}
 
             </div>
             <div className="border-2 py-8 px-4 bg-white rounded-lg w-full col-span-3">
@@ -208,6 +137,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
                     {showModeleDrop&&<DropDown setIsShow={setShowModeleDrop}><div id="modeleDropDown" className=" overflow-y-auto max-h-48 absolute bg-white py-2 border mt-1 w-full rounded-md shadow-md ring-1 ring-gray-300">
                         {filteredData.length >0?filteredData.map((item)=><button name="modelesbuttons" onClick={()=>setSelectedModele(item)} type="button" key={item.id} className="px-4 text-start my-1 py-1 hover:bg-gray-200 w-full">{item.name}</button>):
                         <span className="text-center w-full text-sm">Non modeles !</span>}
+
                     </div></DropDown>}
                     </div>}
                     {selectedModele&&
@@ -257,13 +187,11 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
                     </div>
                 </div>
                 <div className="col-span-3 max-h-[50%] items-end flex justify-end">
-                    <button onClick={handleUpload} className="py-1 px-4 rounded-md bg-secondColor text-white hover:bg-slate-600">Upload</button>
+                    <button  className="py-1 px-4 rounded-md bg-secondColor text-white hover:bg-slate-600">Upload</button>
                 </div>
             </div>
         </div>
-        
-        </div>
-
-    </div>)
-}
-export default UploadForm;
+    </div>
+  );
+};
+export default Files;

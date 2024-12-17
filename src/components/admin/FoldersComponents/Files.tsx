@@ -1,17 +1,19 @@
 import axiosClient from "@/app/lib/axiosClient";
 import FolderDisplay from "./FolderDisplay";
 import FolderDisplayTow from "./FolderDisplayTow";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DisplayFiles from "./DisplayFiles";
 import UploadForm from "@/components/UploadForm";
 import { useLayoutContext } from "@/components/myContext/myContext";
 import Loader from "@/app/lib/Loader";
+import { useDropzone } from "react-dropzone";
 
-const Files = ({setSearchContent,goSearch,loader,regetFolder,
+const Files = ({setSearchContent,goSearch,loader,regetFolder,setFilesOpen,
   folder
 }) => {
     const [showUpoaldModele,setShowUpoaldModele]=useState(false);
     const [folders,setFolders]=useState([]);
+    const [file,setFile]=useState<File>();
     const{setAlerts}=useLayoutContext();
     const getfolders = () => {
 
@@ -28,10 +30,29 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,
       getfolders();
   },[]);
 
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setFile(acceptedFiles[0]);
+    setShowUpoaldModele(true);
+  }, []);
+  
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    acceptedFiles,
+  } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [], // Accept images, can be customized
+      "application/pdf": [], // Accept PDFs
+    },
+
+  });
+
   return (
     <>
     {showUpoaldModele&&
-      <UploadForm regetFolder={regetFolder} folderId={folder.id} onClose={()=>setShowUpoaldModele(false)} sidebarOpen={true}/>}
+      <UploadForm defualtfile={file} regetFolder={regetFolder} folderId={folder.id} onClose={()=>{setShowUpoaldModele(false);setFile(null)}} sidebarOpen={true}/>}
     <div className="rounded shadow-xl ring-1 py-4 px-8 mx-2 my-6 bg-[#f3f3f7]  ring-gray-200">   
       <div className="grid grid-cols-2 items-center">
         <div className="relative max-w-72">
@@ -106,13 +127,39 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,
           <span>createdAt</span>
           <span>lastActive</span>
         </div>
-        <div className=" ">
-          {loader?
+        <div {...getRootProps()} className=" ">
+        <input {...getInputProps()} className="hidden"/>
+        {isDragActive ? (
+        <div className="py-20 bg-white w-full h-full px-2">
+          <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
+              <div className="md:flex">
+                  <div className="w-full p-3">
+                      <div className="relative h-48 rounded-lg border-dashed border-2 border-blue-400 bg-gray-100 flex justify-center items-center">
+      
+                        <div className="absolute">
+                          
+                          <div className="flex flex-col items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-16">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                          </svg>
+
+                          <span className="block text-gray-400 font-normal">Attach you files here</span>
+                          </div>
+                        </div>
+      
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      ) :(
+          loader?
           <div className="flex justify-center items-center my-10"><Loader/></div>
           :
             folder.documents.length > 0 ? (
               folder.documents.map((doc,index) => (
                 <DisplayFiles
+                setFilesOpen={setFilesOpen}
                 folders={folders}
                   key={index}
                   file={doc}
@@ -128,7 +175,7 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,
                   Upload file
                 </span>
               </div>
-            )}
+            ))}
         </div>
       </div>
     </div>

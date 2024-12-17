@@ -1,6 +1,5 @@
 import Header from "../Header";
 import SideBar from "../SideBar";
-import UploadProgress from "../UploadProgress";
 import UploadForm from "../UploadForm";
 import AlertsHandeler from "../AlertsHandeler";
 import { useState } from "react";
@@ -14,16 +13,12 @@ const DefualtLayout=({
     setSidebarOpen,
     uploadForm,
     setUploadForm,
-    uploadFiles,
-    setUploadFiles,
   }: {
     children: React.ReactNode,
     sidebarOpen,
     setSidebarOpen,
     uploadForm,
     setUploadForm,
-    uploadFiles,
-    setUploadFiles,
   })=> {
       const [adminPanels,setAdminPanels]=useState(false);
     return (
@@ -34,7 +29,6 @@ const DefualtLayout=({
       <section className="flex overflow-auto">
         <Header setAdminPanels={setAdminPanels} sidebarOpen={false} adminPanels={adminPanels} setUploadForm={setUploadForm} />
         <SideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        {uploadFiles.length > 0 && <UploadProgress setFiles={setUploadFiles} files={uploadFiles} />}
         <div className={`z-[0] mt-[2.5rem] duration-300 ease-linear grid h-[calc((100vh-2.5rem))] w-full px-8 pt-6 ${sidebarOpen ? "ml-[12rem]" : "ml-[4rem]"} `}>
           {children}
         </div>

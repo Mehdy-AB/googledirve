@@ -5,7 +5,7 @@ import { useLayoutContext } from "@/components/myContext/myContext";
 import { useEffect, useState } from "react";
 
 
-const DisplayFiles=({file,folders})=>{
+const DisplayFiles=({file,folders,setFilesOpen})=>{
 const [dropDown,setDropDown]=useState(false);
 const [dropDownMove,setDropDownMove]=useState(false);
 const [dropDownMove2,setDropDownMove2]=useState(false);
@@ -54,7 +54,7 @@ return(
             >
                 {/* Folder Details */}
                 <div className="flex items-center justify-start gap-2">
-                    <span className="flex underline hover:text-blue-600 cursor-pointer items-center gap-1">
+                    <span onClick={()=>{setFilesOpen({id:file.id,name:file.name})}} className="flex underline hover:text-blue-600 cursor-pointer items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" 
                                             width="20px" height="20px" viewBox="0 0 56 64" enableBackground="new 0 0 56 64" >
                                         <g>

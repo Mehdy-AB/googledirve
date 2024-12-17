@@ -6,16 +6,9 @@ import { useLayoutContext } from "@/components/myContext/myContext";
 const metaData=()=>{
     const {
         sidebarOpen,
-        setSidebarOpen,
-        uploadForm,
-        setUploadForm,
-        uploadFiles,
-        setUploadFiles,
       } = useLayoutContext();
     return(
-        <DefualtLayout setSidebarOpen={setSidebarOpen} setUploadFiles={setUploadFiles} setUploadForm={setUploadForm} sidebarOpen={sidebarOpen} uploadFiles={uploadFiles} uploadForm={uploadForm}>
             <MetaData sidebarOpen={sidebarOpen}/>
-        </DefualtLayout>
     );
 
 }

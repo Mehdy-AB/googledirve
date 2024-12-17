@@ -37,7 +37,31 @@ export async function GET(req: NextRequest) {
         if (!documentId) {
           return NextResponse.json({ error: 'documentId is required for type download' }, { status: 400 });
         }
-        endpoint = `${process.env.Backend_URL}/documents/`;
+        endpoint = `${process.env.Backend_URL}/documents/download/${documentId}`;
+      
+        const fileResponse = await fetch(endpoint, {
+          method: 'GET',
+          headers: {
+            Authorization: session,
+          },
+        });
+      
+        if (!fileResponse.ok) {
+          const errorText = await fileResponse.text();
+          return NextResponse.json({ error: errorText || 'Failed to download file' }, { status: fileResponse.status });
+        }
+      
+        // Extract file content and metadata
+        const contentType = fileResponse.headers.get('Content-Type') || 'application/octet-stream';
+        const contentDisposition = fileResponse.headers.get('Content-Disposition') || `attachment; filename="document_${documentId}.pdf"`;
+        const fileBuffer = await fileResponse.arrayBuffer();
+      
+        return new NextResponse(fileBuffer, {
+          headers: {
+            'Content-Type': contentType,
+            'Content-Disposition': contentDisposition,
+          },
+        });
         break;
       default:
         return NextResponse.json({ error: 'Invalid or missing type parameter' }, { status: 400 });

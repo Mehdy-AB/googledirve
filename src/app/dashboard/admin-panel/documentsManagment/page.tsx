@@ -4,27 +4,47 @@ import axiosClient from "@/app/lib/axiosClient";
 import Files from "@/components/admin/FoldersComponents/Files";
 import FilesSearch from "@/components/admin/FoldersComponents/FilesSearch";
 import Folder from "@/components/admin/FoldersComponents/Folder";
-import DefualtLayout from "@/components/defualtLayout/DefualtLayout";
+import OpenPdf from "@/components/admin/FoldersComponents/OpenPdf";
 import { useLayoutContext } from "@/components/myContext/myContext";
 import { useEffect, useState } from "react";
 
 
 const documentsManagment=()=>{
     const {
-        sidebarOpen,
-        setSidebarOpen,
-        uploadForm,
-        setUploadForm,
-        uploadFiles,
-        setUploadFiles,
         setAlerts
       } = useLayoutContext();
     const [folders, setFolders] = useState([]);
+    const [fileOpen, setFileOpen] = useState(null);
+    const [filesOpen, setFilesOpen] = useState<{id:number,name:string}[]>([]);
+
+    const addFileToOpen = (file: { id: number; name: string }) => {
+        setFilesOpen((prevFilesOpen) => {
+          // Check if the file with the same id already exists
+          const exists = prevFilesOpen.some((f) => f.id === file.id);
+      
+          if (exists) {
+            setFileOpen(file.id);
+            setPanel('openFile')
+            return prevFilesOpen; // No changes needed
+          }
+         
+          // Add the new file while maintaining a max length of 10
+          const updatedFiles = [...prevFilesOpen, file];
+          if (updatedFiles.length > 10) {
+            updatedFiles.shift(); // Remove the first element
+          }
+      
+          setFileOpen(file.id);
+          setPanel('openFile')
+          return updatedFiles;
+        });
+    };
+      
     const [searchContent, setSearchContent] = useState(null);
     const [loader, setLoader] = useState(true);
     const [currentView, setCurrentView] = useState(null); 
     const [breadcrumb, setBreadcrumb] = useState<{folder:string,id:number}[]>([]);  //
-    const [panel, setPanel] = useState<'folders'|'files'|'search'>('folders');
+    const [panel, setPanel] = useState<'folders'|'files'|'search'|'openFile'>('folders');
     const getWorkspaces = () => {
         setLoader(true);
         axiosClient
@@ -77,13 +97,12 @@ const documentsManagment=()=>{
         .then(()=>getFolder(currentView.id,currentView.name))
         .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in creating folder'}]));      
     }
-
+    
     useEffect(()=>{
         getWorkspaces();
     },[]);
 
     return(
-        <DefualtLayout setSidebarOpen={setSidebarOpen} setUploadFiles={setUploadFiles} setUploadForm={setUploadForm} sidebarOpen={sidebarOpen} uploadFiles={uploadFiles} uploadForm={uploadForm}>
         <div className="h-full z-0 w-full py-10 px-30 ">
         <div className="grid items-start grid-cols-2">
             <div className="grid">
@@ -118,17 +137,22 @@ const documentsManagment=()=>{
             <div className=" col-span-2">
 
             </div>
-            <div className="flex gap-3 font-[500] mt-6">
-            <span onClick={()=>setPanel('folders')} className={`${panel==='folders'?'text-blue-400 border-b-2 border-blue-400':'hover:text-blue-400 text-gray-500 border-b-2'} cursor-pointer hover:border-blue-400`}>Folders</span>
-            {currentView&&<span onClick={()=>setPanel('files')} className={`${panel==='files'?'text-blue-400 border-b-2 border-blue-400':'hover:text-blue-400 text-gray-500 border-b-2'} cursor-pointer hover:border-blue-400`}>Files</span>}
-            {panel==='search'&&<span onClick={()=>setPanel('search')} className={`${panel==='search'?'text-blue-400 border-b-2 border-blue-400':'hover:text-blue-400 text-gray-500 border-b-2'} cursor-pointer hover:border-blue-400`}>search</span>}
+            <div className=" col-span-8 gap-3 font-[500] mt-6">
+            <span onClick={()=>{setPanel('folders');setFileOpen(null)}} className={`${panel==='folders'?'text-blue-400 border-b-2 border-blue-400':'hover:text-blue-400 text-gray-500 border-b-2'} cursor-pointer hover:border-blue-400 mx-1`}>Folders</span>
+            {currentView&&<span onClick={()=>{setPanel('files');setFileOpen(null)}} className={`${panel==='files'?'text-blue-400 border-b-2 border-blue-400':'hover:text-blue-400 text-gray-500 border-b-2'} cursor-pointer hover:border-blue-400 mx-1`}>Files</span>}
+            {panel==='search'&&<span onClick={()=>{setPanel('search');setFileOpen(null)}} className={`${panel==='search'?'text-blue-400 border-b-2 border-blue-400':'hover:text-blue-400 text-gray-500 border-b-2'} cursor-pointer hover:border-blue-400 mx-1`}>search</span>}
+            {filesOpen.map((file,index)=><span key={index} onClick={() => { setPanel('openFile'); setFileOpen(file.id); } } className={`${fileOpen === file.id ? 'text-blue-400 border-b-2 border-blue-400' : 'hover:text-blue-400 text-gray-500 border-b-2'} relative group z-0 bg-white px-2 py-1 cursor-default shadow-sm hover:shadow-xl rounded-t-md w-16 hover:border-blue-400 mx-1`}>{(file?.name.length > 15) ? file.name.slice(0, 15) + '...' : file.name}
+                <span className="opacity-0 z-10 group-hover:opacity-100 absolute cursor-pointer bottom-2 right-0" onClick={() => { setTimeout(()=>{setPanel('folders');setFilesOpen((prevFilesOpen) => prevFilesOpen.filter((f) => f.id !== file.id)); setFileOpen(null); },100)} }><svg xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4 ">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg></span></span>
+            )}
             </div>
         </div>
         {panel==='folders'&&<Folder loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} createFolder={createFolder} setBreadcrumb={setBreadcrumb} breadcrumb={breadcrumb} goFile={()=>{setPanel('files')}} folders={folders} currentView={currentView} getFolder={getFolder}/>}
-        {panel==='files'&& currentView && <Files regetFolder={regetFolder} loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} folder={currentView}/>}
-        {panel==='search' && <FilesSearch defaultContent={searchContent}  />}
+        {panel==='files'&& currentView && <Files setFilesOpen={addFileToOpen} regetFolder={regetFolder} loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} folder={currentView}/>}
+        {panel==='search' && <FilesSearch setFilesOpen={addFileToOpen} defaultContent={searchContent}  />}
+        {panel==='openFile'&& fileOpen && <OpenPdf fileId={fileOpen} />}
         </div>
-        </DefualtLayout>
     );
 }
 export default documentsManagment;

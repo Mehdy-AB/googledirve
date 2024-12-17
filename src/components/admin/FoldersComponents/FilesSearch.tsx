@@ -6,7 +6,7 @@ import DisplayFiles from "./DisplayFiles";
 import UploadForm from "@/components/UploadForm";
 import { useLayoutContext } from "@/components/myContext/myContext";
 
-const FilesSearch = ({defaultContent}) => {
+const FilesSearch = ({defaultContent,setFilesOpen}) => {
     const [files,SetFiles]=useState([]);
     const [folders,setFolders]=useState([]);
     const [content,setContent]=useState(defaultContent);
@@ -109,10 +109,10 @@ const FilesSearch = ({defaultContent}) => {
             files.length > 0 ? (
               files.map((doc,index) => (
                 <DisplayFiles
-                folders={folders}
+                  folders={folders}
                   key={index}
-                  file={doc}
-                />
+                  file={doc} 
+                  setFilesOpen={setFilesOpen}                />
               ))
             ) : (
               <div className="text-center my-8 flex flex-col">
