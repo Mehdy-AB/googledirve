@@ -1,8 +1,5 @@
 "use client"
 
-import ChartOne from "@/components/admin/Charts/ChartOne";
-import ChartThree from "@/components/admin/Charts/ChartThree";
-import ChartTwo from "@/components/admin/Charts/ChartTwo";
 
 const Page=()=>{
 
@@ -61,9 +58,9 @@ const Page=()=>{
         </div>
       </div>
 	  <div className=" grid grid-cols-2">
-	  <div><ChartOne /></div>
+	  {/* <div><ChartOne /></div>
 	  <div><ChartTwo /></div>
-	  <div></div><ChartThree />
+	  <div></div><ChartThree /> */}
 	  </div>
 	  
       <div className="container p-2 mx-auto sm:p-4 dark:text-gray-800">
