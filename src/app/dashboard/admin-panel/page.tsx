@@ -3,9 +3,8 @@
 import ChartOne from "@/components/admin/Charts/ChartOne";
 import ChartThree from "@/components/admin/Charts/ChartThree";
 import ChartTwo from "@/components/admin/Charts/ChartTwo";
-import { useState } from "react";
 
-const adminPanel=()=>{
+const Page=()=>{
 
     return(
       <section className=" body-font">
@@ -268,4 +267,4 @@ const adminPanel=()=>{
     );
 
 }
-export default adminPanel;
+export default Page;
