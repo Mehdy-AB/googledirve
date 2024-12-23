@@ -1,8 +1,5 @@
 "use client"
-
 import Accueil from "../../components/accueil/Accueil";
-
-import DefualtLayout from "@/components/defualtLayout/DefualtLayout";
 import {  useLayoutContext } from "@/components/myContext/myContext";
 
 export default function Home() {

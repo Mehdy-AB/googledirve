@@ -23,7 +23,7 @@ const DropDown = ({ setIsShow, children,notEff }: DropDownProps) => {
     };
   }, [setIsShow]);
 
-  return <div ref={dropDownRef}>{children}</div>;
+  return <div className="z-[90]" ref={dropDownRef}>{children}</div>;
 };
 
 export default DropDown;

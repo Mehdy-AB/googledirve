@@ -49,7 +49,7 @@ const UsersManagment=()=>{
         ];
       
         // Iterate over each validation rule
-        for (const validation of validations) {
+        for (let validation of validations) {
           const value = user[validation.key];
       
           // Check for empty field

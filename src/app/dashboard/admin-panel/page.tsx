@@ -1,5 +1,8 @@
 "use client"
 
+import ChartOne from "@/components/admin/Charts/ChartOne";
+import ChartThree from "@/components/admin/Charts/ChartThree";
+import ChartTwo from "@/components/admin/Charts/ChartTwo";
 import { useState } from "react";
 
 const adminPanel=()=>{
@@ -58,8 +61,14 @@ const adminPanel=()=>{
           </div>
         </div>
       </div>
+	  <div className=" grid grid-cols-2">
+	  <div><ChartOne /></div>
+	  <div><ChartTwo /></div>
+	  <div></div><ChartThree />
+	  </div>
+	  
       <div className="container p-2 mx-auto sm:p-4 dark:text-gray-800">
-	<h2 className="mb-4 text-2xl font-semibold leading-tight">Contacts</h2>
+	<h2 className="mb-4 text-2xl font-semibold leading-tight">Logs</h2>
 	<div className="overflow-x-auto">
 		<table className="w-full p-6 text-xs text-left whitespace-nowrap">
 			<colgroup>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DropDown from "../DropDown";
+import DropDown from "../../DropDown";
 
 const MetaDataInTable=({setSelectedMetaData,selectedMetaData,index,meta,duplicateItems,deleteItems,setShowForm,setEdit,metaData,exportToCsv,exportToExcel})=>{
     const [dropDownMetaData,setDropDownMetaData] = useState(false);

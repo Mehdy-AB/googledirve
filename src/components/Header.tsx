@@ -1,100 +1,59 @@
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import DropDown from "./DropDown";
 
 
-const Header=({sidebarOpen,setUploadForm,setAdminPanels,adminPanels}:{sidebarOpen:boolean,setUploadForm:any,setAdminPanels,adminPanels})=>{
+const Header=({setAdminPanels,adminPanels}:{setUploadForm:any,setAdminPanels,adminPanels})=>{
     const [uploadSection,setUploadSection] = useState(false);
     const [notification,setNotification] = useState(false);
     const [info,setinfo] = useState(false);
+    const [searchDrop,setSearchDrop] = useState(false);
     const session = useSession();
+    const [isAdmin,setIsAdmin] = useState(false);
+    useEffect(()=>setIsAdmin(session?.data?.user?.role === 'ADMIN'),[session]);
     const [profile,setProfile] = useState(false);
         return(
             <>
-            
-            <div className={`z-[98] fixed top-0 ${sidebarOpen ? "left-[12rem] w-[calc(100%-12rem)] px-4" : "left-[4rem] w-[calc(100%-4rem)] px-4"} h-[2.5rem] drop-shadow-md bg-foreground`}>
-                <div className={`grid pl-[] justify-center items-center ${sidebarOpen ? "grid-cols-8" : "grid-cols-3"}  gap-4`}>
-                    {/* {!sidebarOpen &&
-                        <div className="text-white font-semibold text-2xl">
-                            Alfresco
-                        </div>} */}
-                    
-                    <div><button onClick={()=>setAdminPanels(!adminPanels)} className="text-white hover:text-gray-200 hover:border-gray-200 py-1 px-6 ml-40 flex rounded-md border items-center">AdminPanel
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-2 size-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                    </svg>
-                        </button></div>
-                    <div className={`relative w-full mt-1 ${sidebarOpen ? " flex justify-center col-span-6" : ""}  max-w-lg`}>
-                        <input type="text" className=" text-gray-800 pl-2 focus:outline-none focus:border border-secondColor rounded-sm p-1 pr-6 text-xs w-full" placeholder="Search MCQ | Topic | Course" />
+            <div className={`z-[98] fixed top-0 left-[16rem] w-[calc(100%-16rem)] px-4 h-[5rem] drop-shadow-md bg-foreground`}>
+                <div className={`grid h-full justify-center items-center grid-cols-12 gap-4`}>
+                    <div className="col-span-3"></div>
 
-                        <button type="submit" className="absolute right-1 top-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                stroke="currentColor" className="w-5 h-5">
-                                <path strokeLinecap="round" strokeLinejoin="round"
-                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    <form className="relative w-full col-span-6 focus-within:text-gray-600 text-white">
+                        <button type="button" className=" absolute left-2 p-1 top-[0.4rem]  rounded-full bg-transparent shadow-md hover:opacity-70">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                        </svg>
+                        </button>
+                        <input onFocus={()=>setSearchDrop(true)} autoComplete="off" placeholder="e.g. File" className="rounded-full w-full h-12 text-white bg-transparent py-2 pl-12 pr-32 outline-none border-2 border-gray-400 transition-colors duration-200 focus:bg-gray-100 shadow-md hover:outline-none focus:text-secondColor focus:ring-gray-100 focus:border-gray-100" type="text" name="query" id="query"/>
+                        <div className={`transition-opacity duration-200 top-14 w-full ease-in-out absolute ${searchDrop ? 'opacity-100' : 'opacity-0'}`}>
+                            {searchDrop&&<DropDown notEff={['query']} setIsShow={setSearchDrop}><div className=" bg-white rounded-2xl h-56 w-full "></div></DropDown>}
+                        </div>
+                        <button type="submit" className="absolute inline-flex items-center h-9 px-4 py-2 text-sm text-white transition duration-150 ease-in-out rounded-full outline-none right-3 top-[0.4rem] bg-foreground shadow-md sm:px-6 sm:text-base sm:font-medium hover:bg-secondColor focus:outline-none ">
+                            <svg className="-ml-0.5 sm:-ml-1 mr-2 w-4 h-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            Search
+                        </button>
+                    </form>
+
+                    <div className={`flex justify-end mt-1 col-span-3 mr-2 items-center `}>
+                        <button onBlur={() => setTimeout(() => setUploadSection(false), 100)} onClick={() => setUploadSection(!uploadSection)} className=" mr-5 hover:opacity-50">
+                            <svg className="size-7 text-white" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 12.125V5.93749M10 5.93749L12.75 8.68749M10 5.93749L7.25003 8.68749M5.18753 14.875C4.20618 14.8761 3.25659 14.5272 2.5093 13.8911C1.76202 13.255 1.26599 12.3733 1.1103 11.4044C0.954606 10.4355 1.14945 9.4428 1.65985 8.60462C2.17024 7.76643 2.96274 7.13767 3.89503 6.83124C3.65551 5.60398 3.90306 4.33167 4.58527 3.28375C5.26747 2.23584 6.33077 1.49459 7.54998 1.21698C8.76919 0.939371 10.0486 1.1472 11.1172 1.79646C12.1859 2.44572 12.9599 3.48543 13.2753 4.69541C13.763 4.5368 14.2853 4.51772 14.7832 4.64031C15.2812 4.76291 15.7349 5.02229 16.0932 5.38918C16.4515 5.75606 16.7001 6.21582 16.8109 6.71653C16.9217 7.21724 16.8902 7.73895 16.7201 8.22274C17.4705 8.50938 18.097 9.04966 18.4907 9.74986C18.8845 10.4501 19.0207 11.266 18.8758 12.0561C18.7309 12.8463 18.3139 13.5607 17.6973 14.0756C17.0807 14.5905 16.3033 14.8733 15.5 14.875H5.18753Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </button>
-
-                    </div>
-
-                    <div className={`flex justify-end mt-1 ${sidebarOpen ? "col-span-2" : ""} mr-2 items-center `}>
-
-                        <div className="relative mr-5 ">
-                            <button onBlur={() => setTimeout(() => setUploadSection(false), 100)} onClick={() => setUploadSection(!uploadSection)} className=" hover:opacity-50">
-                                <svg width="24" height="24" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg" className=" pt-1">
-                                    <path d="M10 12.125V5.93749M10 5.93749L12.75 8.68749M10 5.93749L7.25003 8.68749M5.18753 14.875C4.20618 14.8761 3.25659 14.5272 2.5093 13.8911C1.76202 13.255 1.26599 12.3733 1.1103 11.4044C0.954606 10.4355 1.14945 9.4428 1.65985 8.60462C2.17024 7.76643 2.96274 7.13767 3.89503 6.83124C3.65551 5.60398 3.90306 4.33167 4.58527 3.28375C5.26747 2.23584 6.33077 1.49459 7.54998 1.21698C8.76919 0.939371 10.0486 1.1472 11.1172 1.79646C12.1859 2.44572 12.9599 3.48543 13.2753 4.69541C13.763 4.5368 14.2853 4.51772 14.7832 4.64031C15.2812 4.76291 15.7349 5.02229 16.0932 5.38918C16.4515 5.75606 16.7001 6.21582 16.8109 6.71653C16.9217 7.21724 16.8902 7.73895 16.7201 8.22274C17.4705 8.50938 18.097 9.04966 18.4907 9.74986C18.8845 10.4501 19.0207 11.266 18.8758 12.0561C18.7309 12.8463 18.3139 13.5607 17.6973 14.0756C17.0807 14.5905 16.3033 14.8733 15.5 14.875H5.18753Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </button>
-                            <div className={`transition-opacity duration-200 ease-in ${uploadSection ? 'opacity-100' : 'opacity-0'}`}>
-                                {uploadSection && <div className={`absolute text-base top-8 right-0 w-[12rem] bg-white py-3 rounded-md`}>
-                                    <label onClick={() => setUploadForm(true)} className=" flex cursor-pointer hover:bg-gray-200 w-full p-2">
-                                        <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                                            <path d="M13.5 3H12H7C5.89543 3 5 3.89543 5 5V19C5 20.1046 5.89543 21 7 21H7.5M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V9.75V12V19C19 20.1046 18.1046 21 17 21H16.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                            <path d="M12 21L12 13M12 13L14.5 15.5M12 13L9.5 15.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                        Upload fichiers
-                                    </label>
-                                    <label onClick={() => setUploadForm(true)} className=" flex cursor-pointer hover:bg-gray-200 w-full p-2">
-                                        <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                                            <path d="M18.5 20L18.5 14M18.5 14L21 16.5M18.5 14L16 16.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                            <path d="M12 19H5C3.89543 19 3 18.1046 3 17V7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                        Upload fichiers
-                                    </label>
-
-                                    <div className="border mx-2 m-1"></div>
-                                    <label onClick={() => setUploadForm(true)} className=" flex cursor-pointer hover:bg-gray-200 w-full p-2">
-                                        <svg width="22px" height="22px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                                            <path fill="none" stroke="currentColor" strokeWidth="2" d="M6,13.2932321 C7.63138164,11.6618504 10.6214284,8.67180351 12.3609131,6.93231878 C15.1879856,4.10524628 19.4285943,8.34585492 16.6015218,11.1729275 C13.7744493,14 11.6541453,16.1203048 10.2406087,17.5338408 C8.82707218,18.9473767 6.70676816,16.8270724 8.12030436,15.4135364 C9.53384056,14.0000004 14.4812175,9.05262308 14.4812175,9.05262308" />
-                                        </svg>
-                                        Modele 1
-                                    </label>
-                                    <label onClick={() => setUploadForm(true)} className=" flex cursor-pointer hover:bg-gray-200 w-full p-2">
-                                        <svg width="22px" height="22px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                                            <path fill="none" stroke="currentColor" strokeWidth="2" d="M6,13.2932321 C7.63138164,11.6618504 10.6214284,8.67180351 12.3609131,6.93231878 C15.1879856,4.10524628 19.4285943,8.34585492 16.6015218,11.1729275 C13.7744493,14 11.6541453,16.1203048 10.2406087,17.5338408 C8.82707218,18.9473767 6.70676816,16.8270724 8.12030436,15.4135364 C9.53384056,14.0000004 14.4812175,9.05262308 14.4812175,9.05262308" />
-                                        </svg>
-                                        Modele 2
-                                    </label>
-                                    <label onClick={() => setUploadForm(true)} className=" flex cursor-pointer hover:bg-gray-200 w-full p-2">
-                                        <svg width="22px" height="22px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                                            <path fill="none" stroke="currentColor" strokeWidth="2" d="M6,13.2932321 C7.63138164,11.6618504 10.6214284,8.67180351 12.3609131,6.93231878 C15.1879856,4.10524628 19.4285943,8.34585492 16.6015218,11.1729275 C13.7744493,14 11.6541453,16.1203048 10.2406087,17.5338408 C8.82707218,18.9473767 6.70676816,16.8270724 8.12030436,15.4135364 C9.53384056,14.0000004 14.4812175,9.05262308 14.4812175,9.05262308" />
-                                        </svg>
-                                        Modele 3
-                                    </label>
-                                </div>}
-                            </div>
-                        </div>
-                        <div className="grid justify-center items-center grid-cols-2 gap-3 mr-3">
+                        
+                        <div className={`grid justify-center items-center gap-3 mr-3 ${isAdmin?'grid-cols-3':'grid-cols-2'}`}>
                             <div className="relative mt-1">
-                                <button onBlur={() => setTimeout(() => setNotification(false), 100)} onClick={() => setNotification(!notification)} className="hover:opacity-50">
-                                    <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M11.75 14.5833H16.3334L15.0454 13.2954C14.8725 13.1224 14.7353 12.9171 14.6417 12.691C14.5481 12.465 14.5 12.2228 14.5 11.9782V9.08333C14.5002 7.94569 14.1476 6.83598 13.491 5.90698C12.8343 4.97798 11.9058 4.27538 10.8334 3.89592V3.58333C10.8334 3.0971 10.6402 2.63079 10.2964 2.28697C9.95257 1.94315 9.48625 1.75 9.00002 1.75C8.51379 1.75 8.04747 1.94315 7.70366 2.28697C7.35984 2.63079 7.16669 3.0971 7.16669 3.58333V3.89592C5.03085 4.65125 3.50002 6.689 3.50002 9.08333V11.9791C3.50002 12.4723 3.30385 12.9462 2.9546 13.2954L1.66669 14.5833H6.25002M11.75 14.5833H6.25002M11.75 14.5833V15.5C11.75 16.2293 11.4603 16.9288 10.9446 17.4445C10.4288 17.9603 9.72937 18.25 9.00002 18.25C8.27067 18.25 7.5712 17.9603 7.05548 17.4445C6.53975 16.9288 6.25002 16.2293 6.25002 15.5V14.5833" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                    <span className=" absolute bg-red-600 text-white rounded-full px-1 top-0 text-tiny left-2">4</span>
+                                <button onClick={() => setNotification(!notification)} className="hover:opacity-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-8 text-white">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                                </svg>
+                                    <span className=" absolute bg-red-600 text-white rounded-full px-1 top-0 text-tiny right-0-0">4</span>
                                 </button>
 
                                 <div className={`transition-opacity top-0 right-0 absolute duration-200 ease-in ${notification ? 'opacity-100' : 'opacity-0'}`}>
-                                    {notification &&
-
+                                    {notification &&<DropDown setIsShow={setNotification}>
                                         <div id="dropdownMenu" className='absolute block right-0 top-6 shadow-lg bg-white py-4 z-[1000] min-w-full rounded-lg w-[410px] max-h-[200px] overflow-auto mt-2'>
                                             <div className="flex items-center justify-between px-2 ">
                                                 <p className="text-xs text-blue-600 cursor-pointer">Clear all</p>
@@ -147,17 +106,17 @@ const Header=({sidebarOpen,setUploadForm,setAdminPanels,adminPanels}:{sidebarOpe
                                                 </li>
                                             </ul>
                                             <p className="text-xs px-4 mt-2 inline-block text-blue-600 cursor-pointer">View all Notifications</p>
-                                        </div>}
+                                        </div></DropDown>}
                                 </div>
                             </div>
                             <div className="relative mt-1">
-                                <button onBlur={() => setTimeout(() => setinfo(false), 100)} onClick={() => setinfo(!info)} className="hover:opacity-50">
-                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8.3125 8.3125L8.35008 8.29417C8.46763 8.23544 8.59954 8.21164 8.73019 8.22556C8.86085 8.23948 8.98478 8.29056 9.08731 8.37274C9.18983 8.45491 9.26667 8.56475 9.3087 8.68924C9.35074 8.81373 9.35622 8.94766 9.3245 9.07517L8.6755 11.6748C8.64355 11.8024 8.64886 11.9365 8.6908 12.0611C8.73274 12.1858 8.80955 12.2958 8.91213 12.3781C9.0147 12.4604 9.13872 12.5115 9.2695 12.5255C9.40027 12.5394 9.53229 12.5156 9.64992 12.4568L9.6875 12.4375M17.25 9C17.25 10.0834 17.0366 11.1562 16.622 12.1571C16.2074 13.1581 15.5997 14.0675 14.8336 14.8336C14.0675 15.5997 13.1581 16.2074 12.1571 16.622C11.1562 17.0366 10.0834 17.25 9 17.25C7.91659 17.25 6.8438 17.0366 5.84286 16.622C4.84193 16.2074 3.93245 15.5997 3.16637 14.8336C2.40029 14.0675 1.7926 13.1581 1.37799 12.1571C0.963392 11.1562 0.75 10.0834 0.75 9C0.75 6.81196 1.61919 4.71354 3.16637 3.16637C4.71354 1.61919 6.81196 0.75 9 0.75C11.188 0.75 13.2865 1.61919 14.8336 3.16637C16.3808 4.71354 17.25 6.81196 17.25 9ZM9 5.5625H9.00733V5.56983H9V5.5625Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
+                                <button onClick={() => setinfo(!info)} className="hover:opacity-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8 text-white">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                                </svg>
                                 </button>
                                 <div className={`transition-opacity top-0 right-0 absolute duration-200 ease-in ${info ? 'opacity-100' : 'opacity-0'}`}>
-                                    {info && <div className={`absolute text-base top-8 right-0 w-[12rem] bg-white py-3 rounded-md`}>
+                                    {info && <DropDown setIsShow={setinfo}> <div className={`absolute text-base top-8 right-0 w-[12rem] bg-white py-3 rounded-md`}>
                                         <label className=" flex cursor-pointer hover:bg-gray-200 w-full p-2">
                                             <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
                                                 <path d="M13.5 3H12H7C5.89543 3 5 3.89543 5 5V19C5 20.1046 5.89543 21 7 21H7.5M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V9.75V12V19C19 20.1046 18.1046 21 17 21H16.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -180,18 +139,27 @@ const Header=({sidebarOpen,setUploadForm,setAdminPanels,adminPanels}:{sidebarOpe
                                             </svg>
                                             Conditions et reglement
                                         </label>
-                                    </div>}
+                                    </div></DropDown>}
                                 </div>
+                            </div>
 
+                            <div className="mt-1">
+                                <button onClick={() => setAdminPanels(!adminPanels)} className="hover:opacity-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8 text-white">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                                </button>
                             </div>
                         </div>
+
                         <div className="relative mt-1">
-                            <button onBlur={() => setTimeout(() => setProfile(false), 500)} onClick={() => setProfile(!profile)} className="hover:opacity-50">
-                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <button onClick={() => setProfile(!profile)} className="hover:opacity-50">
+                                <svg className="size-10" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" clipRule="evenodd" d="M25.5612 12.5204C25.5612 15.8356 24.2443 19.015 21.9001 21.3592C19.5558 23.7034 16.3764 25.0204 13.0612 25.0204C9.74601 25.0204 6.56659 23.7034 4.22238 21.3592C1.87818 19.015 0.561218 15.8356 0.561218 12.5204C0.561218 9.20518 1.87818 6.02576 4.22238 3.68155C6.56659 1.33735 9.74601 0.0203857 13.0612 0.0203857C16.3764 0.0203857 19.5558 1.33735 21.9001 3.68155C24.2443 6.02576 25.5612 9.20518 25.5612 12.5204V12.5204ZM16.1862 7.83289C16.1862 8.66169 15.857 9.45654 15.2709 10.0426C14.6849 10.6286 13.89 10.9579 13.0612 10.9579C12.2324 10.9579 11.4376 10.6286 10.8515 10.0426C10.2655 9.45654 9.93622 8.66169 9.93622 7.83289C9.93622 7.00408 10.2655 6.20923 10.8515 5.62318C11.4376 5.03713 12.2324 4.70789 13.0612 4.70789C13.89 4.70789 14.6849 5.03713 15.2709 5.62318C15.857 6.20923 16.1862 7.00408 16.1862 7.83289V7.83289ZM13.0612 14.0829C11.5653 14.0826 10.1007 14.5118 8.84156 15.3195C7.5824 16.1271 6.5816 17.2793 5.95809 18.6391C6.83728 19.6619 7.92727 20.4825 9.15332 21.0446C10.3794 21.6066 11.7125 21.8969 13.0612 21.8954C14.41 21.8969 15.7431 21.6066 16.9691 21.0446C18.1952 20.4825 19.2852 19.6619 20.1643 18.6391C19.5408 17.2793 18.54 16.1271 17.2809 15.3195C16.0217 14.5118 14.5572 14.0826 13.0612 14.0829V14.0829Z" fill="white" />
                                 </svg></button>
                             <div className={`transition-opacity top-8 right-0 absolute duration-200 ease-in ${profile ? 'opacity-100' : 'opacity-0'}`}>
-                                {profile &&
+                                {profile && <DropDown setIsShow={setProfile}>
                                     <div className="dropdown-content menu rounded-md p-2 bg-white shadow bg-base-300 rounded-box w-80">
                                         <div className="rounded-lg bg-base-300 p-3 drop-shadow-xl divide-y divide-neutral">
                                             <div className="flex space-x-4 items-center p-4">
@@ -252,7 +220,7 @@ const Header=({sidebarOpen,setUploadForm,setAdminPanels,adminPanels}:{sidebarOpe
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>}
+                                    </div></DropDown>}
                             </div>
 
                         </div>

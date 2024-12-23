@@ -1,18 +1,14 @@
 import axiosClient from "@/app/lib/axiosClient";
-import FolderDisplay from "./FolderDisplay";
-import FolderDisplayTow from "./FolderDisplayTow";
-import { useEffect, useRef, useState } from "react";
-import DisplayFiles from "./DisplayFiles";
-import UploadForm from "@/components/UploadForm";
+import { useEffect, useState } from "react";
 import { useLayoutContext } from "@/components/myContext/myContext";
 import Loader from "@/app/lib/Loader";
 import DropDown from "@/components/DropDown";
+import Permission from "./Permission";
 
 const Files = ({file}) => {
     const{setAlerts}=useLayoutContext();
     const [modeles,setModeles] = useState([]);
     const [filteredData, setFilteredData] = useState([]); 
-    // const [pdfSrc, setPdfSrc] = useState<string | null>(null);
     const getMedeles = () => {
         axiosClient
             .get("/backReq/admin/metadata", { params: { type: "all" } })
@@ -81,7 +77,7 @@ const Files = ({file}) => {
 
             </div>
             <div className="border-2 py-8 px-4 bg-white rounded-lg w-full col-span-3">
-                <span className="text-xl ">Selecte a modèles : </span>
+                <span className="text-xl "> Modèle : </span>
                 <div>
                 {selectedModele?
                 <div className="text-center border-2 py-2 rounded-md relative">{selectedModele.name}
@@ -159,6 +155,7 @@ const Files = ({file}) => {
                     </div>}
                     
                 </div>
+                <Permission />
             </div>
             </div>
             <div className="grid my-2 grid-cols-10">
@@ -177,7 +174,7 @@ const Files = ({file}) => {
                     </div>
                 </div>
                 <div className="col-span-3 max-h-[50%] items-end flex justify-end">
-                    <button  className="py-1 px-4 rounded-md bg-secondColor text-white hover:bg-slate-600">Upload</button>
+                    <button  className="py-1 px-4 rounded-md bg-secondColor text-white hover:bg-slate-600">Save</button>
                 </div>
             </div>
         </div>

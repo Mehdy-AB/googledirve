@@ -88,7 +88,7 @@ return(
     
     <div>
        
-        <div className="grid border-b-2 border-gray-300 items-stretch p-10 px-28 grid-cols-3 justify-center gap-6">
+        <div className="grid border-b-2 border-gray-300 items-stretch p-16 px-28 grid-cols-3 justify-center gap-6">
         <div className="  p-6 bg-white  grid rounded-lg drop-shadow-lg w-full">
             <span className=' text-secondColor font-semibold'> Modèles de Fichiers Personnalisables </span>
             {/* <div className='relative w-[100%]'>

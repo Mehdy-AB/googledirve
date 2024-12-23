@@ -32,47 +32,7 @@ const Folder = ({
   return (
     <div className="rounded shadow-xl ring-1 py-4 px-8 mx-2 my-6 bg-[#f3f3f7]  ring-gray-200">
       <div className="grid grid-cols-2 items-center">
-        <div className="relative max-w-72">
-          <input onChange={(e)=>setSearchContent(e.target.value)} onKeyUp={(e)=>{if(e.key==="Enter"){goSearch()}}}
-            className="appearance-none border pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-[0.25rem] px-3 text-gray-800 leading-tight focus:outline-none focus:bg-gray-100  focus:shadow-outline text-sm "
-            id="searchFileContent"
-            type="text"
-            placeholder="Search Files & Folders"
-          />
-          <div className="absolute right-0 inset-y-0 flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="-ml-1 cursor-pointer mr-3 h-5 w-5 text-gray-400 hover:text-gray-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </div>
-
-          <div onClick={goSearch} className="absolute left-0 inset-y-0 flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 ml-3 text-gray-400 hover:text-gray-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
-        </div>
+       <div></div>
         <div className=" justify-end flex gap-2">
           <button onClick={()=>setEdit(' ')} className="py-1 flex items-center gap-1 px-4 border bg-blue-400 text-white rounded-lg hover:opacity-80 font-[450]">
             <svg

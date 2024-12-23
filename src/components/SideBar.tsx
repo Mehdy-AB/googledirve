@@ -1,65 +1,34 @@
 import { useRouter } from "next/navigation";
 
-const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => {
+const SideBar = () => {
     const router = useRouter()
 
     return (
-      <div className={`fixed z-[100] ${sidebarOpen ? "w-[12rem]" : "w-[4rem]"} duration-300 ease-linear h-[100%] drop-shadow-md bg-foreground`}>
-        {/* <button
-          onClick={() => setSidebarOpen(!sidebarOpen)} // Wrap the call in an arrow function
-          className={`absolute ${sidebarOpen ? "left-[12rem]" : "left-[4rem]"} duration-300 ease-linear bg-secondColor rounded-r-full p-1 top-[50%]`}
-        >
-         <svg width="10" height="16" viewBox="0 0 10 16" fill="none" className={` duration-300 ease-linear ${sidebarOpen ? "opacity-100" : " rotate-180"}`}  xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.9375 0.5L4.5625 8L8.9375 15.5M5.4375 0.5L1.0625 8L5.4375 15.5" stroke="white" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        </button> */}
-
+      <div className={`fixed z-[100] w-[16rem] duration-300 ease-linear h-[100%] drop-shadow-md bg-foreground`}>
         <div className="overflow-y-auto  overflow-x-hidden">
-        <div className=" flex p-1">
+        <div className=" items-center flex p-1">
         <div >
         <svg width="47" height="41" viewBox="0 0 47 41" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-none"> 
         <path d="M23.4999 8.25759C21.0706 5.16557 17.3256 2.07355 8.04423 1.84665C7.4346 1.83176 6.93744 2.32694 6.93744 2.93675C6.93744 7.46047 6.93744 24.5867 6.93744 29.6517C6.93744 30.2615 7.43465 30.7404 8.04412 30.7603C17.3255 31.0637 21.0706 35.1787 23.4999 38.2709M23.4999 8.25759C25.9293 5.16557 29.6742 2.07355 38.9556 1.84665C39.5653 1.83176 40.0624 2.31581 40.0624 2.92562C40.0624 7.98239 40.0624 24.5933 40.0624 29.6502C40.0624 30.2599 39.5653 30.7404 38.9558 30.7603C29.6744 31.0637 25.9293 35.1787 23.4999 38.2709M23.4999 8.25759V38.2709" stroke="white" strokeWidth="2" strokeLinejoin="round"/>
         <path d="M39.4779 6.25H44.4791C45.0888 6.25 45.5833 6.74436 45.5833 7.35417V36.1486C45.5833 37.0421 44.5306 37.6357 43.7139 37.2729C41.9581 36.4927 39.0279 35.5396 35.1911 35.5396C28.6959 35.5396 23.5 39.375 23.5 39.375C23.5 39.375 18.3039 35.5396 11.8088 35.5396C7.97195 35.5396 5.04174 36.4927 3.28591 37.2729C2.46929 37.6357 1.41663 37.0421 1.41663 36.1486V7.35417C1.41663 6.74436 1.91098 6.25 2.52079 6.25H7.52203" stroke="white" strokeWidth="2" strokeLinejoin="round"/>
         </svg>
         </div>
-        {sidebarOpen &&
-                    <div className="ml-7 text-white font-semibold text-2xl">
-                        Alfresco
+                    <div className="ml-2  text-white font-semibold text-[22px]">
+                    GISCO SYSTEMS
                     </div>
-                }
         </div>
-
-        <button
-          
-          className={`flex ${sidebarOpen ? "ml-6":"ml-[0.65rem]"} mt-6 border-2 py-1 text-white px-2 rounded-lg`}
-        >
-        <div>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-6">
-        <path fillRule="evenodd" d="M11.47 2.47a.75.75 0 0 1 1.06 0l4.5 4.5a.75.75 0 0 1-1.06 1.06l-3.22-3.22V16.5a.75.75 0 0 1-1.5 0V4.81L8.03 8.03a.75.75 0 0 1-1.06-1.06l4.5-4.5ZM3 15.75a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
-        </svg></div>
-        {sidebarOpen &&
-        <div className="ml-4">
-            Upload new
-        </div>
-
-        }
-        </button>
 
         {/* elements in side bar */}
-        <div className=" mt-[100%] grid grid-cols-1">
+        <div className=" mt-12 grid grid-cols-1">
         <div onClick={()=>{router.push("/dashboard")}} className=" flex border-b-2 items-center border-gray-400 border-opacity-20 hover:opacity-50 py-2 p-1 cursor-pointer">
         <div className=" ml-3">
         <svg width="27" height="29" viewBox="0 0 27 29" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M9.58801 26.9486V22.6835C9.58801 21.5947 10.4771 20.7121 11.5738 20.7121H15.5829C16.1096 20.7121 16.6147 20.9198 16.9871 21.2895C17.3595 21.6592 17.5688 22.1606 17.5688 22.6835V26.9486C17.5654 27.4013 17.7442 27.8365 18.0655 28.1577C18.3867 28.479 18.8238 28.6596 19.2798 28.6596H22.015C23.2924 28.6629 24.5187 28.1615 25.4231 27.2659C26.3276 26.3703 26.8359 25.1543 26.8359 23.8861V11.7355C26.8359 10.7111 26.3785 9.73938 25.587 9.08216L16.2823 1.70496C14.6638 0.411483 12.3447 0.453246 10.7745 1.80415L1.6822 9.08216C0.853269 9.72001 0.357827 10.6946 0.333344 11.7355V23.8737C0.333344 26.5169 2.49174 28.6596 5.15426 28.6596H7.827C8.77403 28.6596 9.54368 27.9011 9.55054 26.961L9.58801 26.9486Z" fill="white"/>
         </svg>
-
-
         </div>
-        {sidebarOpen &&
-                    <div className="ml-5 text-whitemt-2 font-poppins text-white font-semibold text-sm">
-                        Accueil
-                    </div>
-                }
+            <div className="ml-5 text-whitemt-2 font-poppins text-white font-semibold ">
+                 Accueil
+            </div>
         </div>
 
         <div onClick={()=>{router.push("/dashboard/suivis")}} className=" flex border-b-2 items-center  border-gray-400 border-opacity-20 hover:opacity-50 py-2 p-1 cursor-pointer">
@@ -70,11 +39,9 @@ const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSid
 
 
         </div>
-        {sidebarOpen &&
-                    <div className="ml-5 mt-2 font-poppins text-white font-semibold text-sm">
+                    <div className="ml-5 mt-2 font-poppins text-white font-semibold ">
                         Suivis
                     </div>
-                }
         </div>
 
         <div onClick={()=>{router.push("/dashboard/mes-fichiers")}}   className=" flex border-b-2 items-center  border-gray-400 border-opacity-20 hover:opacity-50 py-2 p-1 cursor-pointer">
@@ -84,11 +51,9 @@ const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSid
         </svg>
 
         </div>
-        {sidebarOpen &&
-                    <div className="ml-5 mt-2 font-poppins text-white font-semibold text-sm">
+                    <div className="ml-5 mt-2 font-poppins text-white font-semibold ">
                         Mes fichiers
                     </div>
-                }
         </div>
 
         <div  onClick={()=>{router.push("/dashboard/fichiers-partages")}}   className=" flex border-b-2 items-center  border-gray-400 border-opacity-20 hover:opacity-50 py-2 p-1 cursor-pointer">
@@ -98,11 +63,9 @@ const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSid
         </svg>
 
         </div>
-        {sidebarOpen &&
-                    <div className="ml-5 font-poppins text-white font-semibold text-sm">
+                    <div className="ml-5 font-poppins text-white font-semibold ">
                        Fichiers partages
                     </div>
-                }
         </div>
 
         <div  onClick={()=>{router.push("/dashboard/recents")}}  className=" flex border-b-2 items-center  border-gray-400 border-opacity-20 hover:opacity-50 py-2 p-1 cursor-pointer">
@@ -112,26 +75,9 @@ const SideBar = ({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean; setSid
         </svg>
 
         </div>
-        {sidebarOpen &&
-                    <div className="ml-5 mt-2 font-poppins text-white font-semibold text-sm">
+                    <div className="ml-5 mt-2 font-poppins text-white font-semibold ">
                         Recents
                     </div>
-                }
-        </div>
-
-        <div onClick={()=>{router.push("/dashboard/meta-data")}}  className=" flex border-b-2 items-center  border-gray-400 border-opacity-20 hover:opacity-50 py-2 p-1 cursor-pointer">
-        <div className=" ml-3">
-        <svg width="29" height="26" viewBox="0 0 29 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M23.7365 16.1125C26.3868 16.1125 28.5333 18.223 28.5333 20.8267C28.5333 23.429 26.3868 25.5394 23.7365 25.5394C21.0879 25.5394 18.9398 23.429 18.9398 20.8267C18.9398 18.223 21.0879 16.1125 23.7365 16.1125ZM11.911 18.8164C13.0719 18.8164 14.0142 19.7421 14.0142 20.8826C14.0142 22.0216 13.0719 22.9489 11.911 22.9489H2.73904C1.5782 22.9489 0.635895 22.0216 0.635895 20.8826C0.635895 19.7421 1.5782 18.8164 2.73904 18.8164H11.911ZM5.43268 0.741669C8.08292 0.741669 10.2295 2.85209 10.2295 5.45433C10.2295 8.05809 8.08292 10.1685 5.43268 10.1685C2.78399 10.1685 0.635895 8.05809 0.635895 5.45433C0.635895 2.85209 2.78399 0.741669 5.43268 0.741669ZM26.4317 3.38959C27.591 3.38959 28.5333 4.31537 28.5333 5.45433C28.5333 6.59481 27.591 7.52059 26.4317 7.52059H17.2597C16.0989 7.52059 15.1566 6.59481 15.1566 5.45433C15.1566 4.31537 16.0989 3.38959 17.2597 3.38959H26.4317Z" fill="white"/>
-        </svg>
-
-
-        </div>
-        {sidebarOpen &&
-                    <div className="ml-5 mt-2 font-poppins text-white font-semibold text-sm">
-                        Meta-data
-                    </div>
-                }
         </div>
         </div>
       </div>

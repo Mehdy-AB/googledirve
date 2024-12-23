@@ -1,10 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { Rule,data } from "./metaData/MetaData";
+import { Rule,data } from "./admin/Modeles/MetaData";
+import DropDown from "./DropDown";
 
 
-const CreateMetaDataForm=({onClose,sidebarOpen,addMetaData,edit}:{onClose,sidebarOpen,addMetaData,edit?:{metaData:data,update,index:number}})=>{
+const CreateMetaDataForm=({onClose,addMetaData,edit}:{onClose,addMetaData,edit?:{metaData:data,update,index:number}})=>{
     const [ruleLine,setRuleLine]=useState<Rule[]>([]);
     const [fields,setFields] =useState<{name:string,description:string}>({name:"",description:null})
 
@@ -53,37 +54,37 @@ const CreateMetaDataForm=({onClose,sidebarOpen,addMetaData,edit}:{onClose,sideba
       }
 
     return(
-    <div id="wrapper" onClick={handleClose} className={`fixed inset-0 z-[97] mt-[2.5rem] ${sidebarOpen ? "ml-[12rem]":"ml-[4rem]"} bg-secondColor bg-opacity-20 flex justify-center items-center`}>
-        <div className="bg-white px-6 py-4 sm:py-6 rounded-md lg:px-8">
-        <div className="mx-auto max-w-xl flex flex-col items-center justify-center text-center">
-            <div className="border-2 rounded-full w-full mx-8 mt-2 mb-6"></div>
+    <div id="wrapper" onClick={handleClose} className={`fixed inset-0 z-[97] mt-[5rem] ml-[16rem] bg-secondColor bg-opacity-20 flex justify-center items-center`}>
+        <div className="bg-white overflow-auto py-4 px-6 rounded-md lg:px-8">
+        <div className="mx-auto max-w-xl flex flex-col">
+            <div className="border-2 rounded-full w-full mx-auto mb-2"></div>
             <h1 className="text-4xl md:text-3xl font-bold tracking-tight">Créer Modèles</h1>
             <p className="mt-3 text-sm text-gray-500">
                 Créez facilement des modèles de fichiers adaptés à vos besoins.
-                ajoutez des champs pour les dates, les chiffres, et bien plus—parfait pour organiser vos données à votre façon.</p>
-            <div className="border rounded-full w-[70%] mt-6"></div>
+                ajoutez des champs pour les dates, les chiffres, et bien plus-parfait pour organiser vos données à votre façon.</p>
+            <div className="border rounded-full w-[70%] mt-2"></div>
         </div>
         
-        <form onSubmit={()=>{onCreate();onClose()}} className=" mx-auto mt-8 max-w-xl sm:mt-8">
-            <div className="grid gap-x-8 gap-y-6">
+        <form onSubmit={()=>{onCreate();onClose()}} className=" mx-auto mt-4 max-w-xl sm:mt-4">
+            <div className="grid gap-x-8 gap-y-3">
             <div>
                 <label htmlFor="Nom-modèle" className=" text-md font-semibold leading-6 text-secondColor">Nom</label>
-                <div className="mt-2.5">
+                <div className="mt-2">
                 <input defaultValue={fields.name} onChange={onChangeName} required={true} type="text" name="Nom-modèle" id="Nom-modèle" autoComplete="given-name" placeholder="Nom de modèle" className="flex justify-center w-full rounded-md border-2 border-dashed px-3.5 py-2 text-secondColor shadow-sm ring-gray-300 placeholder:text-gray-400 focus:outline-none  focus:border-secondColor focus:border-dashed  sm:text-sm sm:leading-6"/>
                 </div>
             </div>
             
             <div className="">
                 <label htmlFor="description" className="text-md font-semibold leading-6 text-secondColor">Description</label>
-                <div className="mt-2.5">
-                <textarea defaultValue={fields.description} onChange={onChangeDesc} name="description" id="description" rows={4} placeholder="description de modèle ..." className="flex max-h-40 min-h-10 overflow-y-auto justify-center w-full rounded-md border-2 border-dashed px-3.5 py-2 text-secondColor shadow-sm ring-gray-300 placeholder:text-gray-400 focus:outline-none  focus:border-secondColor focus:border-dashed  sm:text-sm sm:leading-6"></textarea>
+                <div className="mt-2">
+                <input type="text" defaultValue={fields.description} onChange={onChangeDesc} name="description" id="description"  placeholder="description de modèle ..." className="flex max-h-100 min-h-10 overflow-y-auto justify-center w-full rounded-md border-2 border-dashed px-3.5 py-2 text-secondColor shadow-sm ring-gray-300 placeholder:text-gray-400 focus:outline-none  focus:border-secondColor focus:border-dashed  sm:text-sm sm:leading-6"></input>
                 </div>
             </div>
 
             <div>
                 <div>
                     <div className="gird grid-cols-2 items-center">
-                    <label htmlFor="ruleLine" className="text-md font-semibold leading-6 text-secondColor">RuleLine : </label>
+                    <label htmlFor="ruleLine" className="text-md font-semibold leading-6 text-secondColor">MetaData : </label>
                     
                     <button onClick={addRule} type="button" className=" border rounded-lg bg-gray-50 ">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className=" size-6">
@@ -122,19 +123,19 @@ const CreateMetaDataForm=({onClose,sidebarOpen,addMetaData,edit}:{onClose,sideba
                                 </div>
                                 <div className=" col-span-2 pl-6 items-center flex">
                                     <div className=" relative">
-                                        <button onBlur={()=>setTimeout(() => {setTypeDrop(null)}, 100)} onClick={()=>{typeDrop === index? setTypeDrop(null):setTypeDrop(index)}} type="button" className="flex items-center group border rounded-md py-[0.15rem] pl-10 pr-3">{_rule.type}
+                                        <button onClick={()=>{typeDrop === index? setTypeDrop(null):setTypeDrop(index)}} type="button" className="flex items-center group border rounded-md py-[0.15rem] pl-10 pr-3">{_rule.type}
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4 ml-5  duration-200 group-hover:rotate-90">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                         </svg>
                                         </button>
                                         <div className=" duration-200 transition-opacity ease-in">
-                                        {typeDrop === index && 
+                                        {typeDrop === index && <DropDown setIsShow={setTypeDrop}>
                                             <div className=" absolute top-8 right-0 border py-2 w-[100%] bg-white rounded-md z-50">
                                                 <button type="button" onClick={()=>onChangeRule(index,{..._rule,type:"Text"})} className="w-full hover:bg-gray-100">Text</button>
                                                 <button type="button" onClick={()=>onChangeRule(index,{..._rule,type:"Boolean"})} className="w-full hover:bg-gray-100">Boolean</button>
                                                 <button type="button" onClick={()=>onChangeRule(index,{..._rule,type:"Number"})} className="w-full hover:bg-gray-100">Number</button>
                                                 <button type="button" onClick={()=>onChangeRule(index,{..._rule,type:"Date"})} className="w-full hover:bg-gray-100">Data</button>
-                                            </div>
+                                            </div></DropDown>
                                         }</div>
                                     </div>
                                 </div>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import CreateMetaDataForm from "../CreateMetaDataForm";
+import CreateMetaDataForm from "../../CreateMetaDataForm";
 import axiosClient from "@/app/lib/axiosClient";
 import * as XLSX from "xlsx";
-import { useLayoutContext } from "../myContext/myContext";
-import MetaDataInTable from "../accueil/MetaDataInTable";
-import DropDown from "../DropDown";
+import { useLayoutContext } from "../../myContext/myContext";
+import MetaDataInTable from "./MetaDataInTable";
+import DropDown from "../../DropDown";
 export interface Rule {
     name: string;
     type: "Text" | "Boolean" | "Number" | "Date";
@@ -19,7 +19,7 @@ export interface data {
     description?:string | null | undefined;
   }
 
-const MetaData=({sidebarOpen})=>{
+const MetaData=({})=>{
     const [metaData,setMetaData] = useState<data[]>([]);
     const {setAlerts}=useLayoutContext();
 
@@ -201,8 +201,8 @@ const MetaData=({sidebarOpen})=>{
     return(
         <div className="h-full" >
             {showForm && (edit?
-            <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} edit={{metaData:edit.data,update:updateMetaData,index:edit.index}}/>:
-            <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} sidebarOpen={sidebarOpen} />)
+            <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} edit={{metaData:edit.data,update:updateMetaData,index:edit.index}}/>:
+            <CreateMetaDataForm onClose={setShowForm} addMetaData={addRuleLine} />)
             }
 
              <div className="p-10 mt-10 grid">
