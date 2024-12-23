@@ -51,7 +51,7 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,setFilesOpen,
   return (
     <>
     {showUpoaldModele&&
-      <UploadForm defualtfile={file} regetFolder={regetFolder} folderId={folder.id} onClose={()=>{setShowUpoaldModele(false);setFile(null)}} sidebarOpen={true}/>}
+      <UploadForm defualtfile={file} regetFolder={regetFolder} folderId={folder.id} onClose={()=>{setShowUpoaldModele(false);setFile(null)}}/>}
     <div className="rounded shadow-xl ring-1 py-4 px-8 mx-2 my-6 bg-[#f3f3f7]  ring-gray-200">   
       <div className="grid grid-cols-2 items-center">
         <div className="relative max-w-72">

@@ -1,14 +1,16 @@
 import axiosClient from "@/app/lib/axiosClient";
-import { error } from "console";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useLayoutContext } from "./myContext/myContext";
 import DropDown from "./DropDown";
 
 
-const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
+const  UploadForm=({onClose,folderId,regetFolder,defualtfile})=>{
     
     const [modeles,setModeles] = useState([]);
     const [filteredData, setFilteredData] = useState([]); 
+    const [folders,setFolders] = useState([]);
+    const [folder,setFolder] = useState(folderId || null);
+    const [filteredDataFolders, setFilteredDataFolders] = useState([]); 
     const {setAlerts}=useLayoutContext();
     const [file, setFile] = useState<File>(defualtfile); // To hold the filtered results
     const getMedeles = () => {
@@ -20,10 +22,22 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
             })
             .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:"error in getting modeles"}]));
     };
+
+    const getFolder = () => {
+      axiosClient
+          .get("/backReq/admin/folders", { params: { type: "all" } })
+          .then((response) => {
+            setFolders(response.data); // Display subfolders and files of the clicked folder
+            setFilteredDataFolders(response.data);
+          })
+          .catch((error) => setAlerts((prv)=>[...prv,{type:2,message:"error in getting folders"}]));
+  };
     useEffect(()=>{
+        getFolder();
         getMedeles();
     },[]);
-
+    const [queryFolders, setQueryFolders] = useState(""); // To hold the search query
+    const [showModeleDropFolders, setShowModeleDropFolders] = useState(false);
     const [query, setQuery] = useState(""); // To hold the search query
     const [showModeleDrop, setShowModeleDrop] = useState(false);
     const [selectedModele, setSelectedModele] = useState<{"id": number,
@@ -47,9 +61,15 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
       }, [selectedModele]);
     useEffect(()=>{
         setFilteredData(
-            modeles.filter((item) => item.name.toLowerCase().includes(query))
+            modeles?.filter((item) => item?.name?.toLowerCase().includes(query))
         );
-    },[query])
+    },[query]);
+
+    useEffect(()=>{
+      setFilteredDataFolders(
+        folders?.filter((item) => item?.name?.toLowerCase().includes(queryFolders))
+      );
+  },[queryFolders]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, ruleLineId: number) => {
         const { value } = e.target;
@@ -95,16 +115,29 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
     }
 
       const handleUpload = async () => {
-        if (!file){ alert("Please select a file to upload");return;}
-        const obligatoryIds = selectedModele.ruleLine
-        .filter((metaData) => metaData.obligatory)
-        .map((metaData) => metaData.id);
+        if (!folder) {
+          setAlerts((prev) => [...prev, { type: 3, message: "Please select a folder" }]);
+          return;
+        }
 
+        if (selectedModele) {          
+        const obligatoryIds = selectedModele.ruleLine
+          .filter((metaData) => metaData.obligatory)
+          .map((metaData) => metaData.id);
+
+        if (!obligatoryIds.every((id) =>
+          metadataValues.some((item) => item.ruleLineId === id && item.value.trim() !== "")
+        )) {
+          setAlerts((prev) => [...prev, { type: 3, message: "Please fill the required metadata" }]);
+          return;
+        }
+        if (!file){setAlerts((prev) => [...prev, { type: 3, message: "Please select a file to upload" }]); return;}
         if(!obligatoryIds.every((id) =>
             metadataValues.some((item) => item.ruleLineId === id && item.value.trim() !== ""))){alert('Please fill the metadata');return}
+        }
         const formData = new FormData();
         formData.append("file", file);
-        formData.append('folderId', folderId); // Add other fields
+        formData.append('folderId', folder); // Add other fields
         formData.append('ruleId', selectedModele.id+'');
         formData.append('metadata', JSON.stringify(metadataValues));
         await axiosClient.post("/backReq/admin/document", formData,{headers:
@@ -119,8 +152,10 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
     const handleClose = (e) => {
         if (e.target.id === 'wrapper') onClose();
       };
+
+      useEffect(() => {console.log(folders)}, [folders]);
     return(
-    <div id="wrapper" onClick={handleClose} className={`fixed inset-0 z-[97] mt-[2.5rem] ${sidebarOpen ? "ml-[12rem]":"ml-[4rem]"} bg-black bg-opacity-20 p-10`}>
+    <div id="wrapper" onClick={handleClose} className={`fixed inset-0 z-[97] mt-[5rem] ml-[16rem] bg-black bg-opacity-20 p-10`}>
         
         <div className="bg-white overflow-y-auto w-full h-full justify-start px-6 py-4 sm:py-6 rounded-md lg:px-8 relative">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" onClick={onClose} className="size-6 absolute right-1 top-1 cursor-pointer">
@@ -130,7 +165,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight ">Upload </h1>
             <p className="mt-3 text-lg ">Please select a PDF file to upload. Once uploaded, the file will be displayed below for preview.</p>
         </div>
-        <div  className=" h-[90%]">
+        <div  className=" ">
         <div className=" grid grid-cols-10 h-[86%] gap-4 mt-4">
             <div className="w-full bg-white border rounded-lg relative items-center flex col-span-7">
             {pdfSrc&&
@@ -146,7 +181,7 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
                 style={{ border: 'none' }}
             ></iframe>
             :<label htmlFor="uploadFile1"
-                className="bg-white text-gray-500 font-semibold text-base rounded px-36 h-64 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
+                className="bg-white my-14 text-gray-500 font-semibold text-base rounded px-36 h-64 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-11 mb-2 fill-gray-500" viewBox="0 0 32 32">
                     <path
                     d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z"
@@ -162,6 +197,60 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
 
             </div>
             <div className="border-2 py-8 px-4 bg-white rounded-lg w-full col-span-3">
+            <span className="text-xl ">Selecte a folder : </span>
+                <div>
+                {folder?
+                <div className="text-center border-2 py-2 rounded-md relative">{folders.find((item)=>item.id===folder)?.name}
+                <svg onClick={()=>setFolder(null)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className=" hover:text-red-500 right-1 top-1 absolute size-4 cursor-pointer">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                </div>
+                :<div className="relative">
+                    <input
+                        className="appearance-none border-2 pl-10 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:ring-gray-600 focus:border-gray-600 focus:shadow-outline"
+                        id="folders-search"
+                        autoComplete="off"
+                        type="text"
+                        onFocus={()=>setShowModeleDropFolders(true)}
+                        value={queryFolders}
+                        onChange={(e)=>setQueryFolders(e.target.value)}
+                        placeholder="Search..."
+                    />
+                    
+
+                    <div className="absolute right-0 inset-y-0 flex items-center">
+                        <svg
+                        onClick={()=>setQueryFolders('')}
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="-ml-1 cursor-pointer mr-3 h-5 w-5 text-gray-400 hover:text-gray-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                        </svg>
+                        
+                    </div>
+
+                    <div className="absolute left-0 inset-y-0 flex items-center">
+                        
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6 ml-3 text-gray-400 hover:text-gray-500">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                    </svg>
+                    </div>
+                    {showModeleDropFolders&&<DropDown notEff={['folders-search']} setIsShow={setShowModeleDropFolders}><div id="modeleDropDown" className=" overflow-y-auto max-h-48 absolute bg-white py-2 z-30 border mt-1 w-full rounded-md shadow-md ring-1 ring-gray-300">
+                        {filteredDataFolders.length >0?filteredDataFolders.map((item)=><button name="modelesbuttons" onClick={()=>setFolder(item.id)} type="button" key={item.id} className="px-4 text-start my-1 py-1 hover:bg-gray-200 w-full">{item.name}</button>):
+                        <span className="text-center w-full text-sm">Non folders !</span>}
+                    </div></DropDown>}
+                    </div>}
+                    
+                    
+                </div>
                 <span className="text-xl ">Selecte a modèles : </span>
                 <div>
                 {selectedModele?
@@ -255,10 +344,10 @@ const  UploadForm=({onClose,sidebarOpen,folderId,regetFolder,defualtfile})=>{
                         <input type="checkbox"/> 
                         <span className="ml-1">orename document with metadata.</span>
                     </div>
-                </div>
-                <div className="col-span-3 max-h-[50%] items-end flex justify-end">
-                    <button onClick={handleUpload} className="py-1 px-4 rounded-md bg-secondColor text-white hover:bg-slate-600">Upload</button>
-                </div>
+              </div>
+              <div className="col-span-3 items-end flex justify-end">
+                  <button onClick={handleUpload} className="py-1 px-4 rounded-md bg-secondColor text-white hover:bg-slate-600">Upload</button>
+              </div>
             </div>
         </div>
         

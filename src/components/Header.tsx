@@ -1,6 +1,8 @@
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import DropDown from "./DropDown";
+import CustemSearch from "./CustemSearch";
+import UploadForm from "./UploadForm";
 
 
 const Header=({setAdminPanels,adminPanels}:{setUploadForm:any,setAdminPanels,adminPanels})=>{
@@ -8,18 +10,21 @@ const Header=({setAdminPanels,adminPanels}:{setUploadForm:any,setAdminPanels,adm
     const [notification,setNotification] = useState(false);
     const [info,setinfo] = useState(false);
     const [searchDrop,setSearchDrop] = useState(false);
+    const [search,setSearch] = useState(false);
     const session = useSession();
     const [isAdmin,setIsAdmin] = useState(false);
     useEffect(()=>setIsAdmin(session?.data?.user?.role === 'ADMIN'),[session]);
     const [profile,setProfile] = useState(false);
         return(
             <>
+            {search&&<CustemSearch onClose={()=>setSearch(false)}/>}
+            {uploadSection&&<UploadForm onClose={() => setUploadSection(false)} folderId={null} regetFolder={()=>{}} defualtfile={null}/>}
             <div className={`z-[98] fixed top-0 left-[16rem] w-[calc(100%-16rem)] px-4 h-[5rem] drop-shadow-md bg-foreground`}>
                 <div className={`grid h-full justify-center items-center grid-cols-12 gap-4`}>
                     <div className="col-span-3"></div>
 
                     <form className="relative w-full col-span-6 focus-within:text-gray-600 text-white">
-                        <button type="button" className=" absolute left-2 p-1 top-[0.4rem]  rounded-full bg-transparent shadow-md hover:opacity-70">
+                        <button onClick={()=>setSearch(true)} type="button" className=" absolute left-2 p-1 top-[0.4rem]  rounded-full bg-transparent shadow-md hover:opacity-70">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
                         </svg>

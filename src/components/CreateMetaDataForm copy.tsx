@@ -55,7 +55,7 @@ const CreateMetaDataForm=({onClose,addMetaData,edit}:{onClose,addMetaData,edit?:
 
     return(
     <div id="wrapper" onClick={handleClose} className={`fixed inset-0 z-[97] mt-[5rem] ml-[16rem] bg-secondColor bg-opacity-20 flex justify-center items-center`}>
-        <div className="bg-white overflow-auto py-4 px-6 rounded-md lg:px-8">
+        <div className="bg-white overflow-auto py-4 max-h-[calc(100vh-7rem)] px-6 rounded-md lg:px-8">
         <div className="mx-auto max-w-xl flex flex-col">
             <div className="border-2 rounded-full w-full mx-auto mb-2"></div>
             <h1 className="text-4xl md:text-3xl font-bold tracking-tight">Créer Modèles</h1>
@@ -93,7 +93,7 @@ const CreateMetaDataForm=({onClose,addMetaData,edit}:{onClose,addMetaData,edit?:
                     </button>
                     </div>
                 </div>
-                <div className="mt-2 border rounded-md max-h-36 p-2 overflow-auto bg-gray-50">
+                <div className="mt-2 border rounded-md max-h-48 p-2 overflow-auto h-48 bg-gray-50">
                     {ruleLine.length === 0 ? 
                         <div className="flex justify-center items-center h-full">
                             <div>
