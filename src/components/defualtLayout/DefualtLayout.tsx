@@ -1,11 +1,9 @@
 import Header from "../Header";
 import SideBar from "../SideBar";
-import UploadForm from "../UploadForm";
 import AlertsHandeler from "../AlertsHandeler";
 import { useState } from "react";
 import AdminPanels from "../admin/tabs/AdminPanels";
 import DropDown from "../DropDown";
-import CustemSearch from "../CustemSearch";
 
 
 const DefualtLayout=({

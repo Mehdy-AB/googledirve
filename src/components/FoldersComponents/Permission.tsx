@@ -50,7 +50,7 @@ const Permission=()=>{
                     <div className="border-r">
                         <div className="relative z-0 px-2">
                         <input
-                            className=" border border-gray-300 hover:border-gray-400 transition-colors rounded-sm w-full py-[0.1rem] px-2 text-gray-800 leading-tight focus:outline-none focus:ring-gray-600 focus:border-gray-600 focus:shadow-outline"
+                            className="z-0 border border-gray-300 hover:border-gray-400 transition-colors rounded-sm w-full py-[0.1rem] px-2 text-gray-800 leading-tight focus:outline-none focus:ring-gray-600 focus:border-gray-600 focus:shadow-outline"
                             id="users-search"
                             type="text"
                             onFocus={()=>setShowModeleDrop(true)}

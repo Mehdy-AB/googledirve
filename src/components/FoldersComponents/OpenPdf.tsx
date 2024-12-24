@@ -64,9 +64,8 @@ const Files = ({file}) => {
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight ">file-N0.pdf </h1>
             <p className="mt-3 text-lg ">option 1 | 50 Users | 5 Admin | 758 items</p>
         </div>
-        <div  className=" h-[90%]">
-        <div className=" grid grid-cols-10 h-[86%] gap-4 mt-4">
-            <div className="w-full bg-white border rounded-lg relative justify-center items-center flex col-span-7">
+        <div className="h-[65vh] overflow-auto grid grid-cols-10 items-start gap-4 mt-4">
+            <div className="w-full bg-white border rounded-lg relative justify-center flex col-span-7">
             {file?.data ?
             <iframe
                 src={file.data}
@@ -76,7 +75,7 @@ const Files = ({file}) => {
             ></iframe>:<Loader/>}
 
             </div>
-            <div className="border-2 py-8 px-4 bg-white rounded-lg w-full col-span-3">
+            <div className="border-2 py-8 px-4 bg-white max-h-[100%] overflow-auto rounded-lg w-full col-span-3">
                 <span className="text-xl "> Modèle : </span>
                 <div>
                 {selectedModele?
@@ -120,7 +119,7 @@ const Files = ({file}) => {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
                         </svg>
                     </div>
-                    {showModeleDrop&&<DropDown notEff={['modeles-search']} setIsShow={setShowModeleDrop}><div id="modeleDropDown" className=" overflow-y-auto max-h-48 absolute bg-white py-2 border mt-1 w-full rounded-md shadow-md ring-1 ring-gray-300">
+                    {showModeleDrop&&<DropDown notEff={['modeles-search']} setIsShow={setShowModeleDrop}><div id="modeleDropDown" className="z-10 overflow-y-auto max-h-48 absolute bg-white py-2 border mt-1 w-full rounded-md shadow-md ring-1 ring-gray-300">
                         {filteredData.length >0?filteredData.map((item)=><button name="modelesbuttons" onClick={()=>setSelectedModele(item)} type="button" key={item.id} className="px-4 text-start my-1 py-1 hover:bg-gray-200 w-full">{item.name}</button>):
                         <span className="text-center w-full text-sm">Non modeles !</span>}
 
@@ -177,7 +176,6 @@ const Files = ({file}) => {
                     <button  className="py-1 px-4 rounded-md bg-secondColor text-white hover:bg-slate-600">Save</button>
                 </div>
             </div>
-        </div>
     </div>
   );
 };

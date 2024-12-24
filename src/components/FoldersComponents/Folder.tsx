@@ -165,17 +165,30 @@ const Folder = ({
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
             </div>}
-          {loader?
+          {loader && (currentView || folders)?
           <div className="flex justify-center items-center my-10"><Loader/></div>
           :currentView ? (
-            currentView.subFolders.length > 0 ? (
-              currentView.subFolders.map((folder) => (
+            currentView.subFolders.length > 0 ? (<>
+              {currentView.subFolders.map((folder) => (
                 <FolderDisplay
                   key={folder.id}
                   id={folder.id}
                   getFolder={getFolder}
                 />
-              ))
+              ))}
+              <div className="text-center items-center my-8 flex flex-col">
+                <span className="font-semibold text-lg">{currentView?.documents?.length || 0} Files</span>
+                <span
+                  onClick={goFile}
+                  className=" flex text-sm underline cursor-pointer"
+                >
+                  See files
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="  ml-1 size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                  </svg>
+
+                </span>
+              </div></>
             ) : (
               <div className="text-center my-8 flex flex-col">
                 <span className="font-semibold">Non Folders !!</span>

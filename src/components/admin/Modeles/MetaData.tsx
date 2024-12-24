@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import CreateMetaDataForm from "../../CustemSearch";
 import axiosClient from "@/app/lib/axiosClient";
 import * as XLSX from "xlsx";
 import { useLayoutContext } from "../../myContext/myContext";
 import MetaDataInTable from "./MetaDataInTable";
 import DropDown from "../../DropDown";
+import CreateMetaDataForm from "@/components/CreateMetaDataForm";
 export interface Rule {
     name: string;
     type: "Text" | "Boolean" | "Number" | "Date";
