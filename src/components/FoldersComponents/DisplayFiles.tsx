@@ -5,7 +5,7 @@ import { useLayoutContext } from "@/components/myContext/myContext";
 import {  useState } from "react";
 
 
-const DisplayFiles=({file,folders,setFilesOpen})=>{
+const DisplayFiles=({file,folders,setCheckedFolders,checkedFolders,setFilesOpen})=>{
 const [dropDown,setDropDown]=useState(false);
 const [dropDownMove,setDropDownMove]=useState(false);
 const [dropDownMove2,setDropDownMove2]=useState(false);
@@ -54,6 +54,19 @@ return(
             >
                 {/* Folder Details */}
                 <div className="flex items-center justify-start gap-2">
+                <label className="flex items-center cursor-pointer relative" htmlFor={"check"+file?.id}>
+                        <input type="checkbox" onChange={(e)=>{setCheckedFolders(e.target.checked?checkedFolders.concat(file.id):checkedFolders.filter((id)=>id!==file.id))}} checked={checkedFolders.includes(file?.id)}
+                        className="peer h-4 w-4 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-secondColor checked:border-secondColor"
+                        id={"check"+file?.id} />
+                        <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
+                            stroke="currentColor" stroke-width="1">
+                            <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                        </svg>
+                        </span>
+                </label>
                     <span onClick={()=>{setFilesOpen({id:file.id,name:file.name})}} className="flex underline hover:text-blue-600 cursor-pointer items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" 
                                             width="20px" height="20px" viewBox="0 0 56 64" enableBackground="new 0 0 56 64" >

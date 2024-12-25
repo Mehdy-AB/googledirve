@@ -8,7 +8,7 @@ import { useLayoutContext } from "@/components/myContext/myContext";
 import Loader from "@/app/lib/Loader";
 import { useDropzone } from "react-dropzone";
 
-const Files = ({setSearchContent,goSearch,loader,regetFolder,setFilesOpen,
+const Files = ({setSearchContent,goSearch,loader,setCheckedFolders,checkedFolders,regetFolder,setFilesOpen,
   folder
 }) => {
     const [showUpoaldModele,setShowUpoaldModele]=useState(false);
@@ -118,6 +118,19 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,setFilesOpen,
       <div className="mt-2 mb-6 grid">
         <div className="grid grid-cols-6 border-b pb-1 px-2">
           <div className="flex items-center justify-start gap-1">
+            <label className="flex items-center cursor-pointer relative" htmlFor={"check"}>
+                    <input type="checkbox" onChange={(e)=>{if(e.target.checked){setCheckedFolders(folder.documents.map(folder=>folder.id))}else{setCheckedFolders([])}}} checked={folder.documents.length===checkedFolders.length&&checkedFolders.length>0}
+                    className="peer h-4 w-4 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-secondColor checked:border-secondColor"
+                    id={"check"} />
+                    <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
+                        stroke="currentColor" stroke-width="1">
+                        <path fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                    </span>
+            </label>
             <span className="">name</span>
           </div>
           <span>size</span>
@@ -158,6 +171,8 @@ const Files = ({setSearchContent,goSearch,loader,regetFolder,setFilesOpen,
             folder.documents.length > 0 ? (
               folder.documents.map((doc,index) => (
                 <DisplayFiles
+                setCheckedFolders={setCheckedFolders}
+                checkedFolders={checkedFolders}
                 setFilesOpen={setFilesOpen}
                 folders={folders}
                   key={index}

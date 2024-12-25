@@ -15,6 +15,8 @@ const Page=()=>{
     const {
         setAlerts
       } = useLayoutContext();
+
+    const [checkedFolders,setCheckedFolders]=useState<number[]>([]);
     const [folders, setFolders] = useState([]);
     const [fileOpen, setFileOpen] = useState(null);
     const [filesOpen, setFilesOpen] = useState<{id:number,name:string,data?}[]>([]);
@@ -33,6 +35,7 @@ const Page=()=>{
               
             })
             .catch(() => setAlerts((prv)=>[...prv,{type:2,message:"error in getting modeles"}]));
+        setCheckedFolders([]);
     };
 
     const addFileToOpen = async (file: { id: number; name: string }) => {
@@ -76,6 +79,7 @@ const Page=()=>{
                 setLoader(false);
             })
             .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in getting workspaces'}]));
+            setCheckedFolders([]);
     };
 
  const getFolder = (folderId,name) => {
@@ -94,7 +98,7 @@ const Page=()=>{
             setLoader(false);
         })
         .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in getting folders'}]));
-        
+        setCheckedFolders([]);
     };
 
     const regetFolder = (folderId) => {
@@ -106,7 +110,7 @@ const Page=()=>{
                 setLoader(false);
             })
             .catch(() => setAlerts((prv)=>[...prv,{type:2,message:'error in getting folders'}]));
-            
+        setCheckedFolders([]);
     };
     const createFolder=(name:string)=>{
         axiosClient
@@ -168,8 +172,8 @@ const Page=()=>{
             )}
             </div>
         </div>
-        {panel==='folders'&&<Folder loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} createFolder={createFolder} setBreadcrumb={setBreadcrumb} breadcrumb={breadcrumb} goFile={()=>{setPanel('files')}} folders={folders} currentView={currentView} getFolder={getFolder}/>}
-        {panel==='files'&& currentView && <Files setFilesOpen={addFileToOpen} regetFolder={regetFolder} loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} folder={currentView}/>}
+        {panel==='folders'&&<Folder  loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} createFolder={createFolder} setBreadcrumb={setBreadcrumb} breadcrumb={breadcrumb} goFile={()=>{setPanel('files')}} folders={folders} currentView={currentView} getFolder={getFolder} setCheckedFolders={setCheckedFolders} checkedFolders={checkedFolders}/>}
+        {panel==='files'&& currentView && <Files setCheckedFolders={setCheckedFolders} checkedFolders={checkedFolders} setFilesOpen={addFileToOpen} regetFolder={regetFolder} loader={loader} goSearch={(()=>setPanel('search'))} setSearchContent={setSearchContent} folder={currentView}/>}
         {panel==='search' && <FilesSearch setFilesOpen={addFileToOpen} defaultContent={searchContent}  />}
         {panel==='openFile'&& fileOpen && <OpenPdf file={filesOpen.find((file)=>file.id===fileOpen)} />}
         </div>
