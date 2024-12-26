@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const UserInTable=({user,selected,setSelected}:{user,selected:number[],setSelected})=>{
+const UserInTable=({user,selected,index,setSelected}:{user,index,selected:number[],setSelected})=>{
     const [permissions,setPermissions] = useState(user.permissions);
-    useEffect(()=>{console.log(permissions,user.permissions)},[permissions])
 return(
 <tr  className="odd:bg-blue-50">
                                 <td className="pl-4 w-8">
@@ -21,13 +20,13 @@ return(
                                         <img src='https://readymadeui.com/profile_2.webp' className="w-9 h-9 rounded-full shrink-0" />
                                         <div className="ml-4">
                                             <p className="text-sm text-black">{user.username}</p>
-                                            <p className="text-xs text-gray-500 mt-0.5">wwwww</p>
+                                            <p className="text-xs text-gray-500 mt-0.5">{user.email}</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td className="pl-4 ">
-                                    <input id={"canUpload"} defaultValue={user.permissions.canUpload} onChange={(e)=>setPermissions({...permissions,canUpload:e.target.checked})} type="checkbox" className="hidden peer" />
-                                    <label htmlFor="canUpload"
+                                    <input id={"canUpload"+index} defaultValue={user.permissions.canUpload} onChange={(e)=>setPermissions({...permissions,canUpload:e.target.checked})} type="checkbox" className="hidden peer" />
+                                    <label htmlFor={"canUpload"+index}
                                         className="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-5 h-5 cursor-pointer bg-blue-400 border  rounded overflow-hidden">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-full fill-white" viewBox="0 0 520 520">
                                             <path
@@ -37,8 +36,8 @@ return(
                                     </label>
                                 </td>
                                 <td className="pl-4 ">
-                                    <input id={"canDownload"} type="checkbox" defaultValue={user.permissions.canDownload} onChange={(e)=>setPermissions({...permissions,canDownload:e.target.checked})} className="hidden peer" />
-                                    <label htmlFor="canDownload"
+                                    <input id={"canDownload"+index} type="checkbox" defaultValue={user.permissions.canDownload} onChange={(e)=>setPermissions({...permissions,canDownload:e.target.checked})} className="hidden peer" />
+                                    <label htmlFor={"canDownload"+index}
                                         className="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-5 h-5 cursor-pointer bg-blue-400 border  rounded overflow-hidden">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-full fill-white" viewBox="0 0 520 520">
                                             <path
@@ -48,8 +47,8 @@ return(
                                     </label>
                                 </td>
                                 <td className="pl-4 ">
-                                    <input id={"canView"} type="checkbox" defaultValue={user.permissions.canView} onChange={(e)=>setPermissions({...permissions,canView:e.target.checked})} className="hidden peer" />
-                                    <label htmlFor="canView"
+                                    <input id={"canView"+index} type="checkbox" defaultValue={user.permissions.canView} onChange={(e)=>setPermissions({...permissions,canView:e.target.checked})} className="hidden peer" />
+                                    <label htmlFor={"canView"+index}
                                         className="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-5 h-5 cursor-pointer bg-blue-400 border  rounded overflow-hidden">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-full fill-white" viewBox="0 0 520 520">
                                             <path
@@ -59,8 +58,8 @@ return(
                                     </label>
                                 </td>
                                 <td className="pl-4 ">
-                                    <input id={"canAdd"} type="checkbox" defaultValue={user.permissions.canAdd} onChange={(e)=>setPermissions({...permissions,canAdd:e.target.checked})} className="hidden peer" />
-                                    <label htmlFor="canAdd"
+                                    <input id={"canAdd"+index} type="checkbox" defaultValue={user.permissions.canAdd} onChange={(e)=>setPermissions({...permissions,canAdd:e.target.checked})} className="hidden peer" />
+                                    <label htmlFor={"canAdd"+index}
                                         className="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-5 h-5 cursor-pointer bg-blue-400 border  rounded overflow-hidden">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-full fill-white" viewBox="0 0 520 520">
                                             <path
@@ -70,8 +69,8 @@ return(
                                     </label>
                                 </td>
                                 <td className="pl-4 ">
-                                    <input id={"canEdit"} type="checkbox" defaultValue={user.permissions.canEdit} onChange={(e)=>setPermissions({...permissions,canEdit:e.target.checked})} className="hidden peer" />
-                                    <label htmlFor="canEdit"
+                                    <input id={"canEdit"+index} type="checkbox" defaultValue={user.permissions.canEdit} onChange={(e)=>setPermissions({...permissions,canEdit:e.target.checked})} className="hidden peer" />
+                                    <label htmlFor={"canEdit"+index}
                                         className="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-5 h-5 cursor-pointer bg-blue-400 border  rounded overflow-hidden">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-full fill-white" viewBox="0 0 520 520">
                                             <path
@@ -81,8 +80,8 @@ return(
                                     </label>
                                 </td>
                                 <td className="pl-4 ">
-                                    <input id={"canDelete"} type="checkbox" defaultValue={user.permissions.canDelete} onChange={(e)=>setPermissions({...permissions,canDelete:e.target.checked})} className="hidden peer" />
-                                    <label htmlFor="canDelete"
+                                    <input id={"canDelete"+index} type="checkbox" defaultValue={user.permissions.canDelete} onChange={(e)=>setPermissions({...permissions,canDelete:e.target.checked})} className="hidden peer" />
+                                    <label htmlFor={"canDelete"+index}
                                         className="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-5 h-5 cursor-pointer bg-blue-400 border  rounded overflow-hidden">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-full fill-white" viewBox="0 0 520 520">
                                             <path

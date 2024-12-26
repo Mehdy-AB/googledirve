@@ -42,7 +42,7 @@ const Header=({setAdminPanels,adminPanels}:{setUploadForm:any,setAdminPanels,adm
                     </form>
 
                     <div className={`flex justify-end mt-1 col-span-3 mr-2 items-center `}>
-                        <button onBlur={() => setTimeout(() => setUploadSection(false), 100)} onClick={() => setUploadSection(!uploadSection)} className=" mr-5 hover:opacity-50">
+                        <button onClick={() => setUploadSection(!uploadSection)} className=" mr-5 hover:opacity-50">
                             <svg className="size-7 text-white" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 12.125V5.93749M10 5.93749L12.75 8.68749M10 5.93749L7.25003 8.68749M5.18753 14.875C4.20618 14.8761 3.25659 14.5272 2.5093 13.8911C1.76202 13.255 1.26599 12.3733 1.1103 11.4044C0.954606 10.4355 1.14945 9.4428 1.65985 8.60462C2.17024 7.76643 2.96274 7.13767 3.89503 6.83124C3.65551 5.60398 3.90306 4.33167 4.58527 3.28375C5.26747 2.23584 6.33077 1.49459 7.54998 1.21698C8.76919 0.939371 10.0486 1.1472 11.1172 1.79646C12.1859 2.44572 12.9599 3.48543 13.2753 4.69541C13.763 4.5368 14.2853 4.51772 14.7832 4.64031C15.2812 4.76291 15.7349 5.02229 16.0932 5.38918C16.4515 5.75606 16.7001 6.21582 16.8109 6.71653C16.9217 7.21724 16.8902 7.73895 16.7201 8.22274C17.4705 8.50938 18.097 9.04966 18.4907 9.74986C18.8845 10.4501 19.0207 11.266 18.8758 12.0561C18.7309 12.8463 18.3139 13.5607 17.6973 14.0756C17.0807 14.5905 16.3033 14.8733 15.5 14.875H5.18753Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>

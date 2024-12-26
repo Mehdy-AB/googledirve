@@ -154,7 +154,7 @@ const Page=()=>{
                 </div>
                 <div className="grid col-span-9">
                 <span className=" text-2xl font-semibold">{currentView?currentView.name:'File Manager'}</span>
-                <span className="pl-1 text-gray-500">{currentView?`${currentView.subFolders.length} subfolders | ${formatBitSize(currentView?.documents.reduce((acc, doc) => acc + doc.size, 0))} | ${currentView.documents.length} items | ${currentView.user + new Date(currentView?.createdAt).toLocaleString()} `:'option 1 | 50 folders | 2.6GB | 758 items'}</span>
+                <span className="pl-1 text-gray-500">{currentView?`${currentView.subFolders.length} subfolders | ${formatBitSize(currentView?.documents.reduce((acc, doc) => acc + doc.size, 0))} | ${currentView.documents.length} items | ${ new Date(currentView?.createdAt).toLocaleString()} `:'option 1 | 50 folders | 2.6GB | 758 items'}</span>
                 </div>
             </div>
             </div>

@@ -53,7 +53,6 @@ export async function GET(req: NextRequest) {
       
         // Extract file content and metadata
         const contentType = fileResponse.headers.get('Content-Type') || 'application/octet-stream';
-        const contentDisposition = fileResponse.headers.get('Content-Disposition') || `attachment; filename="document_${documentId}.pdf"`;
         const fileBuffer = await fileResponse.arrayBuffer();
       
         return new NextResponse(fileBuffer, {

@@ -30,21 +30,43 @@ const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
       .catch(() => {setGroupInfo(null);setAlerts((prv)=>[...prv,{type:2,message:'error in getting group members'}])});
     }
 
-    const createGroupMembers=(userId)=>{
-        axiosClient.post("/backReq/admin/groups/users", {data:{
-                canUpload: false,
-                canDownload: false,
-                canView: false,
-                canAdd: false,
-                canEdit: false,
-                canDelete: false
+    const createGroupMembers = async (userIds: string[]) => {
+        try {
+          // Create an array of promises
+          const promises = userIds.map((id) =>
+            axiosClient.post(
+              "/backReq/admin/groups/users",
+              {
+                data: {
+                  canUpload: false,
+                  canDownload: false,
+                  canView: false,
+                  canAdd: false,
+                  canEdit: false,
+                  canDelete: false,
+                },
+              },
+              {
+                params: { groupId, userId: id },
               }
-        },{
-            params: {groupId:groupId,userId:userId},
-          })
-      .then((response) => {getGroupMembers();setAlerts((prv)=>[...prv,{type:1,message:'done.'}])})
-      .catch(() => {setGroupInfo(groupId);setAlerts((prv)=>[...prv,{type:2,message:'error in add user'}])});
-    }
+            )
+          );
+      
+          // Wait for all requests to complete
+          await Promise.all(promises);
+      
+          // Fetch updated group members and show success alert
+          await getGroupMembers();
+          setAlerts((prev) => [...prev, { type: 1, message: "All users added successfully." }]);
+          setShowUsers(false);
+        } catch (error) {
+          // Handle errors
+          setAlerts((prev) => [...prev, { type: 2, message: "Error adding one or more users." }]);
+          setGroupInfo(groupId); // Optionally update group info
+          await getGroupMembers(); // Refresh the member list regardless
+          setShowUsers(false);
+        }
+      };      
 
     const deleteUser=()=>{
         if(selected.length===0)return;
@@ -52,7 +74,7 @@ const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
             axiosClient.delete("/backReq/admin/groups/users",{
                 params: {groupId:groupId, userId:id }, // Add query parameters here
               }).then(()=>setAlerts((prv)=>[...prv,{type:1,message:'done.'}]))
-          .catch((error) => {setAlerts((prv)=>[...prv,{type:2,message:'error in delete user from group.'}])});
+          .catch((error) => {setAlerts((prv)=>[...prv,{type:2,message:'error in delete user from group.'}]);getGroupMembers();});
         })
       getGroupMembers()
       setSelected([]);
@@ -66,14 +88,13 @@ const GroupInfo=({groupId,setGroupInfo,deleteGroup})=>{
       .then(() => {getgroup();setEdit([])})
       .catch(() => setGroupInfo(null));
     }
-    useEffect(()=>{getgroup();getGroupMembers();setAlerts((prv)=>[...prv,{type:2,message:'error in update group.'}])},[]);
+    useEffect(()=>{getgroup();getGroupMembers();},[]);
     
 return(
     <>
     {showUsers&&
-    <div id="wrapper" onClick={(e:any)=>{if(e.target.id === "wrapper")setShowUsers(false)}} className="fixed inset-0 z-[97] mt-[2.5rem] bg-black bg-opacity-20 flex justify-center items-center">
-        <DisplayUsers createGroupMembers={createGroupMembers} />
-    </div>}
+        <DisplayUsers setShowUsers={setShowUsers} createGroupMembers={createGroupMembers}  includeedUsers={users.map((user:any)=>user.username)}/>
+    }
     {deleteConf&&<div id="wrapper" onClick={(e:any)=>{if(e.target.id === "wrapper")setDeleteConf(false)}} className="fixed inset-0 z-[97] mt-[2.5rem] bg-black bg-opacity-20 flex justify-center items-center">
         <div className="border z-[100] rounded-lg bg-white shadow relative max-w-sm">
             <div className="flex justify-end p-2">
@@ -185,7 +206,7 @@ return(
                         </tr>
                     </thead>
                     <tbody className=" whitespace-nowrap">
-                        {users.length > 0 ? users.map((user, index) => <UserInTable key={index} user={user} selected={selected} setSelected={setSelected} />) :
+                        {users.length > 0 ? users.map((user, index) => <UserInTable index={index} key={index} user={user} selected={selected} setSelected={setSelected} />) :
                             <><tr>
                             <td colSpan={8} className="text-xl text-center">
                                 Non users !!
