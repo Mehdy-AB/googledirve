@@ -23,7 +23,7 @@ const AlertsHandeler=()=>{
     
       
       return(
-        <div className="px-2 z-[100] fixed top-16 duration-300 ease-in left-[35%] opacity-80 w-[35rem]">
+        <div className="px-2 z-[100] fixed top-[5rem] duration-300 ease-in left-[43%] opacity-80 w-[35rem]">
         {alerts.map((alert,index)=>{
         
         {/* <!-- Alert Success --> */}

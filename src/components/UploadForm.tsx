@@ -157,7 +157,7 @@ const  UploadForm=({onClose,folderId,regetFolder,defualtfile})=>{
     <div id="wrapper" onClick={handleClose} className={`fixed inset-0 z-[97] mt-[5rem] ml-[16rem] bg-black bg-opacity-20 p-10`}>
         
         <div className="bg-white overflow-y-auto w-full h-full justify-start px-6 py-4 sm:py-6 rounded-md lg:px-8 relative">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"  className="size-6 absolute right-1 top-1 cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" onClick={onClose} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"  className="size-6 absolute right-1 top-1 cursor-pointer">
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
         <div className="text-start flex flex-col">
